@@ -1,0 +1,9 @@
+<h1>🛡️ {{ guildName }}</h1>
+<h3>Server: Bera</h3>
+
+<h3>🔥 Level Up Today</h3>
+<ul>
+  <li *ngFor="let h of todayUps()">
+    {{ h.name }} → Lv.{{ h.level }}
+  </li>
+</ul>

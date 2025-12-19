@@ -1,0 +1,11 @@
+table {
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid #ccc;
+  padding: 6px;
+}
+.up {
+  background: #d4ffd4;
+  font-weight: bold;
+}

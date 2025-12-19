@@ -1,0 +1,998 @@
+[
+  {
+    "name": "Misa",
+    "level": 212,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:50:32.015Z"
+  },
+  {
+    "name": "xRamu",
+    "level": 296,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:50:35.916Z"
+  },
+  {
+    "name": "xTheOracleFM",
+    "level": 296,
+    "job": "Hoyoung",
+    "updated": "2025-12-19T03:50:39.413Z"
+  },
+  {
+    "name": "Gignomnoy",
+    "level": 295,
+    "job": "Mechanic",
+    "updated": "2025-12-19T03:50:42.904Z"
+  },
+  {
+    "name": "Wunan",
+    "level": 295,
+    "job": "Blade Master",
+    "updated": "2025-12-19T03:50:46.409Z"
+  },
+  {
+    "name": "oURaNuSo",
+    "level": 295,
+    "job": "Angelic Buster",
+    "updated": "2025-12-19T03:50:49.887Z"
+  },
+  {
+    "name": "toskunDW",
+    "level": 295,
+    "job": "Dawn Warrior",
+    "updated": "2025-12-19T03:50:53.423Z"
+  },
+  {
+    "name": "Crusher",
+    "level": 294,
+    "job": "Shade",
+    "updated": "2025-12-19T03:50:56.911Z"
+  },
+  {
+    "name": "NeowSha",
+    "level": 294,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:51:00.397Z"
+  },
+  {
+    "name": "Seolyuna",
+    "level": 202,
+    "job": "Mo Xuan",
+    "updated": "2025-12-19T03:51:03.753Z"
+  },
+  {
+    "name": "Luminórth",
+    "level": 292,
+    "job": "Luminous",
+    "updated": "2025-12-19T03:51:07.279Z"
+  },
+  {
+    "name": "Mobper",
+    "level": 292,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:51:10.779Z"
+  },
+  {
+    "name": "NL1191",
+    "level": 292,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:51:14.277Z"
+  },
+  {
+    "name": "hutcgh",
+    "level": 292,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:51:17.763Z"
+  },
+  {
+    "name": "Wrathlor",
+    "level": 291,
+    "job": "Cadena",
+    "updated": "2025-12-19T03:51:21.242Z"
+  },
+  {
+    "name": "ooTORONTOoo",
+    "level": 291,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T03:51:24.751Z"
+  },
+  {
+    "name": "LittleLuca",
+    "level": 290,
+    "job": "Hoyoung",
+    "updated": "2025-12-19T03:51:28.236Z"
+  },
+  {
+    "name": "LogTM",
+    "level": 290,
+    "job": "Xenon",
+    "updated": "2025-12-19T03:51:31.724Z"
+  },
+  {
+    "name": "LordBeNer997",
+    "level": 290,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:51:36.069Z"
+  },
+  {
+    "name": "Lufyz",
+    "level": 290,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:51:39.598Z"
+  },
+  {
+    "name": "MAFAI",
+    "level": 290,
+    "job": "Shade",
+    "updated": "2025-12-19T03:51:43.170Z"
+  },
+  {
+    "name": "MUTELU",
+    "level": 290,
+    "job": "Evan",
+    "updated": "2025-12-19T03:51:46.680Z"
+  },
+  {
+    "name": "Rentonx",
+    "level": 290,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:51:50.202Z"
+  },
+  {
+    "name": "oDendimonzzo",
+    "level": 290,
+    "job": "Pathfinder",
+    "updated": "2025-12-19T03:51:53.704Z"
+  },
+  {
+    "name": "oErebeAo",
+    "level": 290,
+    "job": "Luminous",
+    "updated": "2025-12-19T03:51:57.226Z"
+  },
+  {
+    "name": "ToeyDBz",
+    "level": 289,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:52:00.738Z"
+  },
+  {
+    "name": "LunaCrimsonV",
+    "level": 288,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:52:04.240Z"
+  },
+  {
+    "name": "SuperLung",
+    "level": 288,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T03:52:08.618Z"
+  },
+  {
+    "name": "CarryPoter",
+    "level": 287,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:52:12.110Z"
+  },
+  {
+    "name": "Enchenter",
+    "level": 287,
+    "job": "Wind Archer",
+    "updated": "2025-12-19T03:52:15.609Z"
+  },
+  {
+    "name": "Galensia",
+    "level": 287,
+    "job": "Sia Astelle",
+    "updated": "2025-12-19T03:52:19.108Z"
+  },
+  {
+    "name": "KYTHnlord",
+    "level": 287,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:52:22.604Z"
+  },
+  {
+    "name": "LunaFlashBow",
+    "level": 287,
+    "job": "Mercedes",
+    "updated": "2025-12-19T03:52:26.109Z"
+  },
+  {
+    "name": "M3M0Lara",
+    "level": 287,
+    "job": "Lara",
+    "updated": "2025-12-19T03:52:29.638Z"
+  },
+  {
+    "name": "Mpp47",
+    "level": 287,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:52:33.204Z"
+  },
+  {
+    "name": "RenResonance",
+    "level": 287,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:52:36.713Z"
+  },
+  {
+    "name": "RyujinBow",
+    "level": 287,
+    "job": "Kain",
+    "updated": "2025-12-19T03:52:40.684Z"
+  },
+  {
+    "name": "0ZEEEEE0",
+    "level": 286,
+    "job": "Zero",
+    "updated": "2025-12-19T03:52:44.169Z"
+  },
+  {
+    "name": "NrkDARK",
+    "level": 286,
+    "job": "Dark Knight",
+    "updated": "2025-12-19T03:52:48.973Z"
+  },
+  {
+    "name": "macchanuHY",
+    "level": 286,
+    "job": "Hoyoung",
+    "updated": "2025-12-19T03:52:52.497Z"
+  },
+  {
+    "name": "Gordonfreema",
+    "level": 285,
+    "job": "Adele",
+    "updated": "2025-12-19T03:52:56.328Z"
+  },
+  {
+    "name": "Lufoz",
+    "level": 285,
+    "job": "Shade",
+    "updated": "2025-12-19T03:52:59.842Z"
+  },
+  {
+    "name": "Myosotiz",
+    "level": 285,
+    "job": "Luminous",
+    "updated": "2025-12-19T03:53:03.369Z"
+  },
+  {
+    "name": "Snowril",
+    "level": 285,
+    "job": "Marksman",
+    "updated": "2025-12-19T03:53:06.882Z"
+  },
+  {
+    "name": "naaNraK",
+    "level": 285,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:53:10.865Z"
+  },
+  {
+    "name": "Gignoy",
+    "level": 284,
+    "job": "Paladin",
+    "updated": "2025-12-19T03:53:14.362Z"
+  },
+  {
+    "name": "MAKWIT",
+    "level": 284,
+    "job": "Aran",
+    "updated": "2025-12-19T03:53:17.858Z"
+  },
+  {
+    "name": "Digrada",
+    "level": 283,
+    "job": "Luminous",
+    "updated": "2025-12-19T03:53:21.367Z"
+  },
+  {
+    "name": "KSNekoLyn",
+    "level": 282,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:53:25.298Z"
+  },
+  {
+    "name": "Memphistoz",
+    "level": 282,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:53:28.805Z"
+  },
+  {
+    "name": "Tanjihut",
+    "level": 282,
+    "job": "Dark Knight",
+    "updated": "2025-12-19T03:53:32.306Z"
+  },
+  {
+    "name": "J00demonS",
+    "level": 281,
+    "job": "Demon Slayer",
+    "updated": "2025-12-19T03:53:36.330Z"
+  },
+  {
+    "name": "JerrySamat",
+    "level": 281,
+    "job": "Wild Hunter",
+    "updated": "2025-12-19T03:53:39.838Z"
+  },
+  {
+    "name": "Jr00ice",
+    "level": 281,
+    "job": "Unknown",
+    "updated": "2025-12-19T03:53:43.737Z"
+  },
+  {
+    "name": "hutdag",
+    "level": 281,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:53:47.221Z"
+  },
+  {
+    "name": "oNoOnEo",
+    "level": 281,
+    "job": "Zero",
+    "updated": "2025-12-19T03:53:50.721Z"
+  },
+  {
+    "name": "Enzis",
+    "level": 280,
+    "job": "Angelic Buster",
+    "updated": "2025-12-19T03:53:54.535Z"
+  },
+  {
+    "name": "GodOfHee",
+    "level": 280,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:53:58.431Z"
+  },
+  {
+    "name": "KYTHds",
+    "level": 280,
+    "job": "Demon Slayer",
+    "updated": "2025-12-19T03:54:01.942Z"
+  },
+  {
+    "name": "Kayanky",
+    "level": 280,
+    "job": "Hero",
+    "updated": "2025-12-19T03:54:05.483Z"
+  },
+  {
+    "name": "ManOnAMech",
+    "level": 280,
+    "job": "Mechanic",
+    "updated": "2025-12-19T03:54:08.989Z"
+  },
+  {
+    "name": "TongYip",
+    "level": 280,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:54:12.490Z"
+  },
+  {
+    "name": "oIvaliceo",
+    "level": 280,
+    "job": "Evan",
+    "updated": "2025-12-19T03:54:16.413Z"
+  },
+  {
+    "name": "Mpp477",
+    "level": 279,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:54:19.921Z"
+  },
+  {
+    "name": "iLynnn",
+    "level": 279,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:54:23.438Z"
+  },
+  {
+    "name": "BuhFlipBoom",
+    "level": 278,
+    "job": "Evan",
+    "updated": "2025-12-19T03:54:26.953Z"
+  },
+  {
+    "name": "ComfieBucc",
+    "level": 278,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T03:54:30.856Z"
+  },
+  {
+    "name": "HeroBlaz",
+    "level": 277,
+    "job": "Hero",
+    "updated": "2025-12-19T03:54:34.443Z"
+  },
+  {
+    "name": "KhaPhaeng",
+    "level": 277,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:54:38.004Z"
+  },
+  {
+    "name": "Cankar",
+    "level": 276,
+    "job": "Demon Slayer",
+    "updated": "2025-12-19T03:54:41.521Z"
+  },
+  {
+    "name": "IFvFinder",
+    "level": 276,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:54:45.070Z"
+  },
+  {
+    "name": "KYTHpaladin",
+    "level": 276,
+    "job": "Paladin",
+    "updated": "2025-12-19T03:54:48.648Z"
+  },
+  {
+    "name": "MAMUI",
+    "level": 276,
+    "job": "Ren",
+    "updated": "2025-12-19T03:54:52.154Z"
+  },
+  {
+    "name": "Ricknever",
+    "level": 276,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:54:55.734Z"
+  },
+  {
+    "name": "Wrathir",
+    "level": 276,
+    "job": "Sia Astelle",
+    "updated": "2025-12-19T03:54:59.232Z"
+  },
+  {
+    "name": "ooDendizzoo",
+    "level": 276,
+    "job": "Adele",
+    "updated": "2025-12-19T03:55:02.745Z"
+  },
+  {
+    "name": "ïMisa",
+    "level": 276,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:55:06.253Z"
+  },
+  {
+    "name": "JodGatingGun",
+    "level": 275,
+    "job": "Wild Hunter",
+    "updated": "2025-12-19T03:55:09.759Z"
+  },
+  {
+    "name": "Jodirada",
+    "level": 275,
+    "job": "Xenon",
+    "updated": "2025-12-19T03:55:13.266Z"
+  },
+  {
+    "name": "KnivesFeel",
+    "level": 275,
+    "job": "Khali",
+    "updated": "2025-12-19T03:55:16.773Z"
+  },
+  {
+    "name": "LeShadeMan",
+    "level": 275,
+    "job": "Shade",
+    "updated": "2025-12-19T03:55:20.702Z"
+  },
+  {
+    "name": "LittLynn",
+    "level": 275,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:55:24.273Z"
+  },
+  {
+    "name": "RabbitCat",
+    "level": 275,
+    "job": "Ren",
+    "updated": "2025-12-19T03:55:28.199Z"
+  },
+  {
+    "name": "Seolminju",
+    "level": 275,
+    "job": "Unknown",
+    "updated": "2025-12-19T03:55:31.716Z"
+  },
+  {
+    "name": "URaStelle",
+    "level": 275,
+    "job": "Sia Astelle",
+    "updated": "2025-12-19T03:55:35.249Z"
+  },
+  {
+    "name": "oUReNuSo",
+    "level": 275,
+    "job": "Ren",
+    "updated": "2025-12-19T03:55:38.780Z"
+  },
+  {
+    "name": "supachaikDB",
+    "level": 275,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:55:42.275Z"
+  },
+  {
+    "name": "xLynnLink",
+    "level": 275,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:55:45.763Z"
+  },
+  {
+    "name": "xTheOracleTZ",
+    "level": 273,
+    "job": "Zero",
+    "updated": "2025-12-19T03:55:49.282Z"
+  },
+  {
+    "name": "Foxrain1191",
+    "level": 272,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:55:53.201Z"
+  },
+  {
+    "name": "JSZRI",
+    "level": 272,
+    "job": "Zero",
+    "updated": "2025-12-19T03:55:57.130Z"
+  },
+  {
+    "name": "KSNekoB",
+    "level": 272,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:56:00.673Z"
+  },
+  {
+    "name": "LenReiLein",
+    "level": 272,
+    "job": "Ren",
+    "updated": "2025-12-19T03:56:04.173Z"
+  },
+  {
+    "name": "MyLifel305S",
+    "level": 272,
+    "job": "Adele",
+    "updated": "2025-12-19T03:56:07.759Z"
+  },
+  {
+    "name": "oMasaroso",
+    "level": 272,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:56:11.269Z"
+  },
+  {
+    "name": "xRamad",
+    "level": 272,
+    "job": "Shade",
+    "updated": "2025-12-19T03:56:14.776Z"
+  },
+  {
+    "name": "Érix",
+    "level": 272,
+    "job": "Bishop",
+    "updated": "2025-12-19T03:56:18.295Z"
+  },
+  {
+    "name": "AnglerFísh",
+    "level": 271,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T03:56:21.797Z"
+  },
+  {
+    "name": "KYTHbowman",
+    "level": 271,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:56:25.734Z"
+  },
+  {
+    "name": "KYTHcfm2",
+    "level": 271,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:56:29.244Z"
+  },
+  {
+    "name": "lalladawn",
+    "level": 271,
+    "job": "Dawn Warrior",
+    "updated": "2025-12-19T03:56:33.136Z"
+  },
+  {
+    "name": "xMarshadower",
+    "level": 271,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:56:36.706Z"
+  },
+  {
+    "name": "Fenryz",
+    "level": 270,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:56:40.210Z"
+  },
+  {
+    "name": "Gig09",
+    "level": 270,
+    "job": "Corsair",
+    "updated": "2025-12-19T03:56:43.699Z"
+  },
+  {
+    "name": "JodBangkonte",
+    "level": 270,
+    "job": "Kaiser",
+    "updated": "2025-12-19T03:56:47.188Z"
+  },
+  {
+    "name": "LynnLyzZ",
+    "level": 270,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:56:50.713Z"
+  },
+  {
+    "name": "MOONsilver",
+    "level": 1,
+    "job": "Hayato",
+    "updated": "2025-12-19T03:56:53.985Z"
+  },
+  {
+    "name": "Meawdusa",
+    "level": 270,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:56:57.922Z"
+  },
+  {
+    "name": "Moonlancer",
+    "level": 270,
+    "job": "Dark Knight",
+    "updated": "2025-12-19T03:57:01.442Z"
+  },
+  {
+    "name": "OhZeeeeeD",
+    "level": 270,
+    "job": "Zero",
+    "updated": "2025-12-19T03:57:04.955Z"
+  },
+  {
+    "name": "Renryn",
+    "level": 270,
+    "job": "Ren",
+    "updated": "2025-12-19T03:57:08.461Z"
+  },
+  {
+    "name": "Thararat",
+    "level": 270,
+    "job": "Ren",
+    "updated": "2025-12-19T03:57:12.455Z"
+  },
+  {
+    "name": "WendyWindie",
+    "level": 270,
+    "job": "Wind Archer",
+    "updated": "2025-12-19T03:57:16.375Z"
+  },
+  {
+    "name": "Lalilyn",
+    "level": 269,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:57:19.882Z"
+  },
+  {
+    "name": "SecondChancc",
+    "level": 268,
+    "job": "Ren",
+    "updated": "2025-12-19T03:57:23.419Z"
+  },
+  {
+    "name": "DWsupachaik",
+    "level": 267,
+    "job": "Dawn Warrior",
+    "updated": "2025-12-19T03:57:26.918Z"
+  },
+  {
+    "name": "Millhouse",
+    "level": 1,
+    "job": "Hayato",
+    "updated": "2025-12-19T03:57:30.202Z"
+  },
+  {
+    "name": "Ayameaw",
+    "level": 266,
+    "job": "Kanna",
+    "updated": "2025-12-19T03:57:33.719Z"
+  },
+  {
+    "name": "Baitery",
+    "level": 266,
+    "job": "Hayato",
+    "updated": "2025-12-19T03:57:37.221Z"
+  },
+  {
+    "name": "DWkoomu",
+    "level": 266,
+    "job": "Dawn Warrior",
+    "updated": "2025-12-19T03:57:40.746Z"
+  },
+  {
+    "name": "Karavynn",
+    "level": 266,
+    "job": "Corsair",
+    "updated": "2025-12-19T03:57:44.682Z"
+  },
+  {
+    "name": "avann895",
+    "level": 266,
+    "job": "Hero",
+    "updated": "2025-12-19T03:57:48.587Z"
+  },
+  {
+    "name": "Gig69",
+    "level": 265,
+    "job": "Dark Knight",
+    "updated": "2025-12-19T03:57:52.136Z"
+  },
+  {
+    "name": "supachaik",
+    "level": 265,
+    "job": "Demon Avenger",
+    "updated": "2025-12-19T03:57:55.636Z"
+  },
+  {
+    "name": "CaosAnakin",
+    "level": 264,
+    "job": "Aran",
+    "updated": "2025-12-19T03:57:59.136Z"
+  },
+  {
+    "name": "Gig22",
+    "level": 264,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:02.638Z"
+  },
+  {
+    "name": "NanGoongBiAh",
+    "level": 264,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:06.147Z"
+  },
+  {
+    "name": "RennyNaHee",
+    "level": 264,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:09.655Z"
+  },
+  {
+    "name": "UsagiRanka",
+    "level": 264,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:13.161Z"
+  },
+  {
+    "name": "Hyogakori",
+    "level": 263,
+    "job": "Battle Mage",
+    "updated": "2025-12-19T03:58:17.188Z"
+  },
+  {
+    "name": "Crëëks",
+    "level": 262,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T03:58:20.695Z"
+  },
+  {
+    "name": "DuskBIader",
+    "level": 262,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:58:24.231Z"
+  },
+  {
+    "name": "Gig33",
+    "level": 262,
+    "job": "Hero",
+    "updated": "2025-12-19T03:58:27.732Z"
+  },
+  {
+    "name": "KYTHdb",
+    "level": 262,
+    "job": "Blade Master",
+    "updated": "2025-12-19T03:58:31.232Z"
+  },
+  {
+    "name": "Kupera",
+    "level": 262,
+    "job": "Shade",
+    "updated": "2025-12-19T03:58:35.148Z"
+  },
+  {
+    "name": "MinazeZaka",
+    "level": 262,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:38.664Z"
+  },
+  {
+    "name": "Reebu",
+    "level": 262,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:58:42.233Z"
+  },
+  {
+    "name": "khaoLam",
+    "level": 262,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:45.755Z"
+  },
+  {
+    "name": "xClariSx",
+    "level": 262,
+    "job": "Ren",
+    "updated": "2025-12-19T03:58:49.788Z"
+  },
+  {
+    "name": "xxxURaNuSxxx",
+    "level": 262,
+    "job": "Mo Xuan",
+    "updated": "2025-12-19T03:58:53.295Z"
+  },
+  {
+    "name": "JSPhTI",
+    "level": 261,
+    "job": "Phantom",
+    "updated": "2025-12-19T03:58:56.808Z"
+  },
+  {
+    "name": "Michouz",
+    "level": 261,
+    "job": "Lynn",
+    "updated": "2025-12-19T03:59:00.752Z"
+  },
+  {
+    "name": "NeowShaJr",
+    "level": 261,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:59:04.254Z"
+  },
+  {
+    "name": "NrkBow",
+    "level": 261,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:59:07.794Z"
+  },
+  {
+    "name": "BillyBrown",
+    "level": 260,
+    "job": "Hero",
+    "updated": "2025-12-19T03:59:11.333Z"
+  },
+  {
+    "name": "JSKNI",
+    "level": 260,
+    "job": "Kanna",
+    "updated": "2025-12-19T03:59:14.829Z"
+  },
+  {
+    "name": "KSNekoRn",
+    "level": 260,
+    "job": "Ren",
+    "updated": "2025-12-19T03:59:18.336Z"
+  },
+  {
+    "name": "LaraVanner",
+    "level": 260,
+    "job": "Lara",
+    "updated": "2025-12-19T03:59:22.279Z"
+  },
+  {
+    "name": "LucaBlue",
+    "level": 260,
+    "job": "Phantom",
+    "updated": "2025-12-19T03:59:25.798Z"
+  },
+  {
+    "name": "Siavina",
+    "level": 260,
+    "job": "Sia Astelle",
+    "updated": "2025-12-19T03:59:29.342Z"
+  },
+  {
+    "name": "Vaninogo",
+    "level": 260,
+    "job": "Bowmaster",
+    "updated": "2025-12-19T03:59:32.868Z"
+  },
+  {
+    "name": "avan345",
+    "level": 260,
+    "job": "Blade Master",
+    "updated": "2025-12-19T03:59:36.362Z"
+  },
+  {
+    "name": "oPureLighTo",
+    "level": 260,
+    "job": "Sia Astelle",
+    "updated": "2025-12-19T03:59:39.878Z"
+  },
+  {
+    "name": "ÉrixShadow",
+    "level": 260,
+    "job": "Shadower",
+    "updated": "2025-12-19T03:59:43.379Z"
+  },
+  {
+    "name": "NUTSAMA",
+    "level": 257,
+    "job": "Night Walker",
+    "updated": "2025-12-19T03:59:47.291Z"
+  },
+  {
+    "name": "PongPingZa",
+    "level": 256,
+    "job": "Adele",
+    "updated": "2025-12-19T03:59:50.801Z"
+  },
+  {
+    "name": "FullMax",
+    "level": 253,
+    "job": "Night Lord",
+    "updated": "2025-12-19T03:59:54.693Z"
+  },
+  {
+    "name": "ToeyXNN",
+    "level": 252,
+    "job": "Xenon",
+    "updated": "2025-12-19T03:59:58.188Z"
+  },
+  {
+    "name": "Demonmmnnb",
+    "level": 250,
+    "job": "Demon Avenger",
+    "updated": "2025-12-19T04:00:01.703Z"
+  },
+  {
+    "name": "IceInThaVein",
+    "level": 250,
+    "job": "Unknown",
+    "updated": "2025-12-19T04:00:05.197Z"
+  },
+  {
+    "name": "KrvRen",
+    "level": 250,
+    "job": "Ren",
+    "updated": "2025-12-19T04:00:08.699Z"
+  },
+  {
+    "name": "MorphoHaiya",
+    "level": 250,
+    "job": "Hayato",
+    "updated": "2025-12-19T04:00:12.630Z"
+  },
+  {
+    "name": "Mpp047",
+    "level": 250,
+    "job": "Ren",
+    "updated": "2025-12-19T04:00:16.148Z"
+  },
+  {
+    "name": "BoMappGold",
+    "level": 245,
+    "job": "Night Lord",
+    "updated": "2025-12-19T04:00:19.645Z"
+  },
+  {
+    "name": "BkkoneX01",
+    "level": 240,
+    "job": "Night Lord",
+    "updated": "2025-12-19T04:00:23.599Z"
+  },
+  {
+    "name": "KYTHbuc",
+    "level": 240,
+    "job": "Buccaneer",
+    "updated": "2025-12-19T04:00:27.106Z"
+  }
+]
