@@ -7,43 +7,48 @@
     [(ngModel)]="search"
     class="search"
   />
+  <br>
+  <br>
 
   <table align="center">
     <thead>
       <tr>
+        <th width="50">No.</th>
         <th>Character</th>
         <th>Job</th>
-        <th>Level</th>
-        <th>EXP</th>
-        <th>EXP Yesterday</th> 
+        <th width="70">Level</th>
+        <th>EXP(%) Today</th>
+        <th>EXP(%) Yesterday</th> 
+        <th>Difference</th> 
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let c of filteredCurrent()">
-        <td class="char">
-          <img [src]="c.img" width="100" />
-          {{ c.name }}
+      <tr *ngFor="let c of filteredCurrent(); let i = index">
+        <td align="center">{{ i+1 }}</td>
+        <td class="char" align="center">
+          <img [src]="c.img" width="120" />
+          <br>
+          <h3>{{ c.name }}</h3>
         </td>
 
-        <td>{{ c.job }}</td>
+        <td align="center">{{ c.job }}</td>
 
-        <td>Lv. {{ c.level }}
+        <td align="center">Lv. {{ c.level }}
           <span *ngIf="isLvlChangedToday(c)" class="changed">▲</span>
         </td>
-
-        <td>
+        <td align="center">
           <!-- {{ c.exp | number }} -->
-          ({{ expPercent(c) }}%)
+          {{ expPercent(c) }}%
           <span *ngIf="isExpChangedToday(c)" class="changed">▲</span>
         </td>
-        <td>
+        <td align="center">
           <!-- {{ c.exp | number }} -->
-          ({{ lastExpPercent(c.name) }}%)
+          {{ lastExpPercent(c.name) }}%
         </td>
-        <td>
+        <td align="center">
           <!-- {{ c.exp | number }} -->
-          ({{ (lastExpPercent(c.name) - expPercent(c)).toFixed(3) }}%)
+          {{ diffExpPercent(c) }}%
         </td>
       </tr>
     </tbody>

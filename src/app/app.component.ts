@@ -138,4 +138,35 @@ export class AppComponent implements OnInit {
     if (!y) return false;
     return c.exp !== y.exp;
   }
+
+  diffExpPercent(c: CurrentChar): number | null {
+    const y = this.yesterdayOf(c.name);
+    if (!y) return null;
+
+    const needYesterday = this.expTable[y.level];
+    const needToday = this.expTable[c.level];
+    if (!needYesterday || !needToday) return null;
+
+    const yesterdayPercent =
+      Number(((y.exp / needYesterday) * 100).toFixed(3));
+
+    const todayPercent = this.expPercent(c);
+
+    // ✅ กรณีเลเวลไม่เปลี่ยน
+    if (y.level === c.level) {
+      return Number((todayPercent - yesterdayPercent).toFixed(3));
+    }
+
+    // ✅ กรณีเลเวลอัป (บวกข้ามเลเวล)
+    if (c.level > y.level) {
+      const diff =
+        (100 - yesterdayPercent) + todayPercent;
+
+      return Number(diff.toFixed(3));
+    }
+
+    // ❓ กรณีเลเวลลด (แทบไม่ควรเกิด)
+    return null;
+  }
+
 }
