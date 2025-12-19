@@ -220,5 +220,43 @@ export class AppComponent implements OnInit {
       result.push(this.formatDMY(d));
     }
     return result;
-}
+  }
+
+  formatShortDate(dateKey: string): string {
+    // dateKey = dd-mm-yyyy
+    const [d, m, y] = dateKey.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    });
+  }
+  
+  get todayKey(): string {
+    if (this.activeDate) return this.activeDate;
+    return this.getDateKey(new Date());
+  }
+
+  get yesterdayKey(): string {
+    const base = this.activeDate
+      ? this.parseDateKey(this.activeDate)
+      : new Date();
+
+    const d = new Date(base);
+    d.setDate(d.getDate() - 1);
+    return this.getDateKey(d);
+  }
+
+  getDateKey(d: Date): string {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+  }
+
+  parseDateKey(key: string): Date {
+    const [dd, mm, yyyy] = key.split('-').map(Number);
+    return new Date(yyyy, mm - 1, dd);
+  }
 }

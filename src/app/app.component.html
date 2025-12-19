@@ -29,13 +29,13 @@
   <table align="center">
     <thead>
       <tr>
-        <th>No.</th>
-        <th>Character</th>
-        <th>Job</th>
-        <th>Level</th>
-        <th>EXP Today (%)</th>
-        <th>EXP Yesterday (%)</th>
-        <th>Difference</th>
+        <th width="50">No.</th>
+        <th width="100">Character</th>
+        <th width="150">Job</th>
+        <th width="100">Level</th>
+        <th width="100">{{ formatShortDate(todayKey) }}</th>
+        <th width="100">{{ formatShortDate(yesterdayKey) }}</th>
+        <th width="100">Difference</th>
       </tr>
     </thead>
 
@@ -48,7 +48,7 @@
         <td align="center">{{ i + 1 }}</td>
 
         <td align="center">
-          <img [src]="c.img" width="80" /><br />
+          <img [src]="c.img" width="120" /><br />
           <b>{{ c.name }}</b>
         </td>
 

@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href /asgardrealm-guild/",
     "update": "node scripts/update-nexon.js",
     "deploy": "gh-pages -d dist/maple-guild -r https://github.com/9nrakrl-maker/asgardrealm-guild.git"
   },

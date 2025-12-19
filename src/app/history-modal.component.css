@@ -6,6 +6,11 @@
   z-index: 1000;
 }
 
+:host {
+  display: block;
+  color: #2b2b2b;   /* ตัวหนังสือเข้ม */
+}
+
 /* modal box */
 .modal {
   position: fixed;

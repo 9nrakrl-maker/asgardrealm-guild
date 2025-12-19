@@ -1,6 +1,6 @@
-body {
-  background-color: #f2f3f0;; /* เทาอ่อนสบายตา */
-  color: #333;
+.container {
+  display: block;
+  color: #f1f1f1;   /* สีตัวหนังสือหน้าหลัก */
 }
 .app-container {
   background: #ffffff;
