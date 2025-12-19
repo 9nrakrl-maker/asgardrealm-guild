@@ -1,11 +1,15 @@
 {
+  "type": "module",
+  "scripts": {
+    "update": "node scripts/update-nexon.js"
+  },
   "name": "maple-guild",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "update": "node scripts/fetch-mapleranks.js"
+    "update": "node scripts/update-nexon.js"
   },
   "dependencies": {
     "@angular/animations": "^17.0.0",

@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
-interface Character {
+interface CurrentChar {
   name: string;
   level: number;
+  exp: number;
   job: string;
-  updated: string;
-  leveledUp?: boolean;
+  img: string;
+  time: string;
 }
 
-interface History {
+interface HistoryItem {
   name: string;
+  date: string;
   level: number;
+  exp: number;
   time: string;
 }
 
@@ -22,46 +24,118 @@ interface History {
 })
 export class AppComponent implements OnInit {
 
-  members: Character[] = [];
-  history: History[] = [];
-  search = '';
-  sortKey: 'name' | 'level' = 'level';
-  sortDesc = true;
   guildName = 'AsgardRealm Guild';
 
-  constructor(private http: HttpClient) {}
+  current: CurrentChar[] = [];
+  history: HistoryItem[] = [];
 
-  ngOnInit(): void {
-    this.http.get<Character[]>('assets/data/current.json')
-      .subscribe(c => {
-        this.http.get<History[]>('assets/data/history.json')
-          .subscribe(h => {
-            this.history = h;
-            this.members = c.map(m => ({
-              ...m,
-              leveledUp: this.didLevelUp(m)
-            }));
-          });
-      });
-      this.http.get<any>('assets/data/guild.json').subscribe(g => {
-        this.guildName = g.guild;
+  expTable: Record<number, number> = {};
+
+  search = '';
+
+  ngOnInit() {
+    this.loadCurrent();
+    this.loadHistory();
+    this.loadExpTable();
+  }
+
+  // ---------------- load data ----------------
+
+  loadCurrent() {
+    fetch('assets/data/current.json')
+      .then(res => res.json())
+      .then(data => {
+        // ถ้า current.json เป็น object { name: {...} }
+        const arr = Array.isArray(data)
+          ? data
+          : Object.values(data);
+
+        this.current = arr.sort((a: any, b: any) => {
+          // 1️⃣ level
+          if (b.level !== a.level) {
+            return b.level - a.level;
+          }
+
+          // 2️⃣ exp %
+          const expA = a.expPercent ?? a.exp ?? 0;
+          const expB = b.expPercent ?? b.exp ?? 0;
+          return expB - expA;
+        });
+      })
+      .catch(() => this.current = []);
+  }
+
+  loadHistory() {
+    fetch('assets/data/history.json?ts=' + Date.now())
+      .then(res => res.json())
+      .then((data: HistoryItem[]) => {
+        this.history = Array.isArray(data) ? data : [];
+      })
+      .catch(err => {
+        console.error(err);
+        this.history = [];
       });
   }
 
-  didLevelUp(m: Character): boolean {
-    const records = this.history.filter(h => h.name === m.name);
-    if (records.length < 2) return false;
-    return records[records.length - 1].level >
-           records[records.length - 2].level;
+  loadExpTable() {
+    fetch('assets/data/exp-table.json')
+      .then(r => r.json())
+      .then(d => this.expTable = d || {})
+      .catch(() => this.expTable = {});
   }
 
-  get filtered() {
-    return this.members
-      .filter(m => m.name.toLowerCase().includes(this.search.toLowerCase()))
-      .sort((a, b) => {
-        const v1 = a[this.sortKey];
-        const v2 = b[this.sortKey];
-        return this.sortDesc ? (v2 as any) - (v1 as any) : (v1 as any) - (v2 as any);
-      });
+  // ---------------- helpers ----------------
+
+  filteredCurrent() {
+    return this.current.filter(c =>
+      c.name.toLowerCase().includes(this.search.toLowerCase())
+    );
+  }
+
+  expPercent(c: CurrentChar): number {
+    if (!c || c.exp == null) return 0;
+    const need = this.expTable[c.level];
+    if (!need) return 0;
+    return Number(((c.exp / need) * 100).toFixed(3));
+  }
+
+  lastExpPercent(name: string): number {
+    if (!name) return 0;
+
+    const list = this.history
+      .filter(h => h.name === name)
+      .sort((a, b) => +new Date(b.time) - +new Date(a.time));
+
+    if (!list.length) return 0;
+
+    const target = list.length > 1 ? list[1] : list[0];
+    const need = this.expTable[target.level];
+
+    if (!need || need <= 0) return 0;
+
+    return Number(((target.exp / need) * 100).toFixed(3));
+  }
+
+  yesterdayOf(name: string): HistoryItem | null {
+    const list = this.history
+      .filter(h => h.name === name)
+      .sort((a, b) => +new Date(b.time) - +new Date(a.time));
+    return list.length > 1 ? list[1] : null;
+  }
+
+  lastUpdate(c: CurrentChar): string {
+    return c.time ? new Date(c.time).toLocaleString() : '-';
+  }
+
+  isLvlChangedToday(c: any): boolean {
+    const y = this.yesterdayOf(c.name);
+    if (!y) return false;
+    return c.level !== y.level;
+  }
+
+  isExpChangedToday(c: any): boolean {
+    const y = this.yesterdayOf(c.name);
+    if (!y) return false;
+    return c.exp !== y.exp;
   }
 }

@@ -1,9 +1,51 @@
-<h1>🛡️ {{ guildName }}</h1>
-<h3>Server: Bera</h3>
+<div class="container" align="center">
+  <h2>{{ guildName }}</h2>
 
-<h3>🔥 Level Up Today</h3>
-<ul>
-  <li *ngFor="let h of todayUps()">
-    {{ h.name }} → Lv.{{ h.level }}
-  </li>
-</ul>
+  <input align="center"
+    type="text"
+    placeholder="Search character..."
+    [(ngModel)]="search"
+    class="search"
+  />
+
+  <table align="center">
+    <thead>
+      <tr>
+        <th>Character</th>
+        <th>Job</th>
+        <th>Level</th>
+        <th>EXP</th>
+        <th>EXP Yesterday</th> 
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of filteredCurrent()">
+        <td class="char">
+          <img [src]="c.img" width="100" />
+          {{ c.name }}
+        </td>
+
+        <td>{{ c.job }}</td>
+
+        <td>Lv. {{ c.level }}
+          <span *ngIf="isLvlChangedToday(c)" class="changed">▲</span>
+        </td>
+
+        <td>
+          <!-- {{ c.exp | number }} -->
+          ({{ expPercent(c) }}%)
+          <span *ngIf="isExpChangedToday(c)" class="changed">▲</span>
+        </td>
+        <td>
+          <!-- {{ c.exp | number }} -->
+          ({{ lastExpPercent(c.name) }}%)
+        </td>
+        <td>
+          <!-- {{ c.exp | number }} -->
+          ({{ (lastExpPercent(c.name) - expPercent(c)).toFixed(3) }}%)
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

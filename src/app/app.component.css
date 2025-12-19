@@ -9,3 +9,10 @@ td, th {
   background: #d4ffd4;
   font-weight: bold;
 }
+.changed {
+  background-color: #fff3cd;
+}
+
+.bg-green-500 { background: #22c55e; }
+.bg-blue-500  { background: #3b82f6; }
+.bg-red-500   { background: #ef4444; }
