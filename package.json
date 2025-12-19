@@ -1,16 +1,14 @@
 {
   "type": "module",
   "scripts": {
-    "update": "node scripts/update-nexon.js"
+    "start": "ng serve",
+    "build": "ng build",
+    "update": "node scripts/update-nexon.js",
+    "deploy": "gh-pages -d dist/maple-guild -r https://github.com/9nrakrl-maker/asgardrealm-guild.git"
   },
   "name": "maple-guild",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "ng serve",
-    "build": "ng build",
-    "update": "node scripts/update-nexon.js"
-  },
   "dependencies": {
     "@angular/animations": "^17.0.0",
     "@angular/common": "^17.0.0",
@@ -30,6 +28,7 @@
     "@angular-devkit/build-angular": "^17.0.0",
     "@angular/cli": "^17.0.0",
     "@angular/compiler-cli": "^17.0.0",
+    "gh-pages": "^6.3.0",
     "typescript": "~5.2.0"
   }
 }
