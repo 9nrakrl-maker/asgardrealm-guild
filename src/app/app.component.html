@@ -1,56 +1,76 @@
 <div class="container" align="center">
+
   <h2>{{ guildName }}</h2>
 
-  <input align="center"
-    type="text"
-    placeholder="Search character..."
-    [(ngModel)]="search"
-    class="search"
-  />
-  <br>
+  <div class="filter-bar">
+    <!-- search name -->
+    <div class="filter-item">
+      <span class="icon">🔍</span>
+      <input align="center"
+        type="text"
+        placeholder="ค้นหาชื่อตัวละคร"
+        [(ngModel)]="search"
+      />
+    </div>
+    <br>
+    <!-- date picker -->
+    <div class="filter-item">
+      <span class="icon">📅</span>
+      <input align="center"
+        type="date"
+        [(ngModel)]="selectedDate"
+        (change)="onDateChange()"
+      />
+    </div>
+  </div>
+
   <br>
 
   <table align="center">
     <thead>
       <tr>
-        <th width="50">No.</th>
+        <th>No.</th>
         <th>Character</th>
         <th>Job</th>
-        <th width="70">Level</th>
-        <th>EXP(%) Today</th>
-        <th>EXP(%) Yesterday</th> 
-        <th>Difference</th> 
+        <th>Level</th>
+        <th>EXP Today (%)</th>
+        <th>EXP Yesterday (%)</th>
+        <th>Difference</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let c of filteredCurrent(); let i = index">
-        <td align="center">{{ i+1 }}</td>
-        <td class="char" align="center">
-          <img [src]="c.img" width="120" />
-          <br>
-          <h3>{{ c.name }}</h3>
+      <tr *ngFor="let c of filteredAndSortedList(); let i = index"
+        class="char-row"
+        [ngClass]="{ 'level-up': isLevelUpToday(c.name) }"
+        (click)="openCharModal(c.name)">
+
+        <td align="center">{{ i + 1 }}</td>
+
+        <td align="center">
+          <img [src]="c.img" width="80" /><br />
+          <b>{{ c.name }}</b>
         </td>
 
         <td align="center">{{ c.job }}</td>
 
-        <td align="center">Lv. {{ c.level }}
-          <span *ngIf="isLvlChangedToday(c)" class="changed">▲</span>
-        </td>
         <td align="center">
-          <!-- {{ c.exp | number }} -->
-          {{ expPercent(c) }}%
-          <span *ngIf="isExpChangedToday(c)" class="changed">▲</span>
+          Lv. {{ c.level }}
+          <span *ngIf="isLevelUpToday(c.name)" class="level-up-badge">▲</span>
         </td>
-        <td align="center">
-          <!-- {{ c.exp | number }} -->
-          {{ lastExpPercent(c.name) }}%
-        </td>
-        <td align="center">
-          <!-- {{ c.exp | number }} -->
-          {{ diffExpPercent(c) }}%
-        </td>
+
+        <td align="center">{{ expToday(c.name) }}%</td>
+        <td align="center">{{ expYesterday(c.name) }}%</td>
+        <td align="center">{{ diffExpPercent(c.name) }}%</td>
       </tr>
     </tbody>
   </table>
 </div>
+
+  <!-- 🪟 Modal -->
+  <app-history-modal
+    *ngIf="showModal"
+    [name]="selectedChar"
+    [history]="historyCache"
+    (close)="closeModal()">
+  </app-history-modal>

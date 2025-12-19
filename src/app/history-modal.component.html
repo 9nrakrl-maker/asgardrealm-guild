@@ -1,0 +1,45 @@
+<!-- backdrop -->
+<div class="modal-backdrop" (click)="close.emit()"></div>
+
+<!-- modal -->
+<div class="modal" (click)="$event.stopPropagation()">
+
+  <div class="modal-header">
+    <h3>{{ name }}</h3>
+    <button (click)="close.emit()">✖</button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- Level up -->
+    <div *ngIf="levelUpDates().length">
+      <h4>📈 Level Up Dates</h4>
+      <ul>
+        <li *ngFor="let d of levelUpDates()">{{ d }}</li>
+      </ul>
+      <hr />
+    </div>
+
+    <!-- EXP today -->
+    <p>
+      🔥 EXP Gain Today:
+      <b>{{ expGainTodayPercent() }}%</b>
+    </p>
+
+    <hr />
+
+    <!-- range -->
+    <p>
+      📊 Show data for:
+      <select [(ngModel)]="selectedRange" (change)="onRangeChange()">
+        <option *ngFor="let r of ranges" [value]="r">
+          {{ r }} days
+        </option>
+      </select>
+    </p>
+
+    <!-- chart -->
+    <canvas id="expChart" height="200"></canvas>
+
+  </div>
+</div>

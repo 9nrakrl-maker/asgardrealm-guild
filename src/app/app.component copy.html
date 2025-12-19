@@ -1,0 +1,56 @@
+<div class="container" align="center">
+  <h2>{{ guildName }}</h2>
+
+  <input align="center"
+    type="text"
+    placeholder="Search character..."
+    [(ngModel)]="search"
+    class="search"
+  />
+  <br>
+  <br>
+
+  <table align="center">
+    <thead>
+      <tr>
+        <th width="50">No.</th>
+        <th>Character</th>
+        <th>Job</th>
+        <th width="70">Level</th>
+        <th>EXP(%) Today</th>
+        <th>EXP(%) Yesterday</th> 
+        <th>Difference</th> 
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of filteredCurrent(); let i = index">
+        <td align="center">{{ i+1 }}</td>
+        <td class="char" align="center">
+          <img [src]="c.img" width="120" />
+          <br>
+          <h3>{{ c.name }}</h3>
+        </td>
+
+        <td align="center">{{ c.job }}</td>
+
+        <td align="center">Lv. {{ c.level }}
+          <span *ngIf="isLvlChangedToday(c)" class="changed">▲</span>
+        </td>
+        <td align="center">
+          <!-- {{ c.exp | number }} -->
+          {{ expPercent(c) }}%
+          <span *ngIf="isExpChangedToday(c)" class="changed">▲</span>
+        </td>
+        <td align="center">
+          <!-- {{ c.exp | number }} -->
+          {{ lastExpPercent(c.name) }}%
+        </td>
+        <td align="center">
+          <!-- {{ c.exp | number }} -->
+          {{ diffExpPercent(c) }}%
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

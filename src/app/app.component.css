@@ -1,3 +1,13 @@
+body {
+  background-color: #f2f3f0;; /* เทาอ่อนสบายตา */
+  color: #333;
+}
+.app-container {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
 table {
   border-collapse: collapse;
 }
@@ -16,3 +26,96 @@ td, th {
 .bg-green-500 { background: #22c55e; }
 .bg-blue-500  { background: #3b82f6; }
 .bg-red-500   { background: #ef4444; }
+
+.row-clickable {
+  cursor: pointer;
+}
+.row-clickable:hover {
+  background: rgba(0,0,0,0.05);
+}
+/* แถวปกติ */
+.char-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.char-row:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* 🌟 คนที่เลเวลอัพ */
+.char-row.level-up {
+  background: linear-gradient(
+    90deg,
+    rgba(120, 200, 150, 0.15),
+    rgba(120, 200, 150, 0.05)
+  );
+  border-left: 4px solid #4caf50;
+}
+
+/* badge เล็ก ๆ ข้าง level */
+.level-up-badge {
+  margin-left: 6px;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: bold;
+}
+/* ===== filter bar ===== */
+.filter-bar
+
+/* box */
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+
+  padding: 8px 12px;
+  width: 280px;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* hover / focus */
+.filter-item:focus-within {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* icon */
+.filter-item .icon {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+/* input */
+.filter-item input {
+  border: none;
+  outline: none;
+  width: 100%;
+
+  font-size: 14px;
+  background: transparent;
+  color: #333;
+}
+
+/* placeholder */
+.filter-item input::placeholder {
+  color: #aaa;
+}
+
+/* date input icon fix */
+.filter-item input[type="date"] {
+  color-scheme: light;
+  align-items: center;
+}
+
+/* responsive */
+@media (max-width: 600px) {
+  .filter-item {
+    min-width: 100%;
+  }
+}

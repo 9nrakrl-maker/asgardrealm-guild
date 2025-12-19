@@ -1,13 +1,10 @@
-name: Update Maple Data
+name: Update Maple History Daily
 
 on:
   schedule:
-    # 13:00 เวลาไทย (UTC+7) = 06:00 UTC
-    - cron: '0 6 * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    # เที่ยงคืนเวลาไทย (UTC+7)
+    - cron: '0 17 * * *'
+  workflow_dispatch: # กดรันมือได้
 
 jobs:
   update:
@@ -17,21 +14,28 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: Install deps
-        run: npm ci
+      - name: Install dependencies
+        run: npm install
 
       - name: Run update script
         run: node scripts/update-nexon.js
 
-      - name: Commit updated data
+      - name: Commit and push if changed
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add src/assets/data
-          git commit -m "auto update maple data" || echo "no changes"
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add src/assets/data/history
+          git status --porcelain
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore: update history $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          else
+            echo "No changes to commit"
+          fi
