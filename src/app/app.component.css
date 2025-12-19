@@ -8,6 +8,10 @@
   padding: 20px 24px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
+.td-light {
+  background-color: #ffffff;
+  color: #2b2b2b;
+}
 table {
   border-collapse: collapse;
 }

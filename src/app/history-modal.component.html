@@ -5,19 +5,21 @@
 <div class="modal" (click)="$event.stopPropagation()">
 
   <div class="modal-header">
-    <h3>{{ name }}</h3>
+    <h1>{{ name }}</h1>
     <button (click)="close.emit()">✖</button>
   </div>
 
   <div class="modal-body">
 
     <!-- Level up -->
-    <div *ngIf="levelUpDates().length">
+    <div *ngIf="levelUpList.length">
       <h4>📈 Level Up Dates</h4>
       <ul>
-        <li *ngFor="let d of levelUpDates()">{{ d }}</li>
+        <li *ngFor="let e of levelUpList">
+          {{ e.date }}
+          <span class="level-up">({{ e.level }})</span>
+        </li>
       </ul>
-      <hr />
     </div>
 
     <!-- EXP today -->

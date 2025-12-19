@@ -44,6 +44,8 @@
   margin-top: 10px;
 }
 
-
-
-
+.level-up {
+  color: #4caf50;
+  font-weight: 600;
+  margin-left: 6px;
+}

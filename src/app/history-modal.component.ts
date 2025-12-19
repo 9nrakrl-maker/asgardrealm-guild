@@ -33,7 +33,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
 
   ranges = [3, 7, 15, 30, 60, 90, 180, 360];
   selectedRange = 7;
-
+  levelUpList: { date: string; level: number }[] = [];
   allRecords: HistoryItem[] = [];
   expTable: Record<number, number> = {};
 
@@ -61,18 +61,29 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
     this.allRecords = dates
       .map(d => this.history[d]?.find(h => h.name === this.name))
       .filter(Boolean) as HistoryItem[];
+
+    // ⭐ สำคัญมาก
+    this.buildLevelUpEvents();
   }
 
   // ---------- level up ----------
-  levelUpDates(): string[] {
-    const result: string[] = [];
-    for (let i = 1; i < this.allRecords.length; i++) {
-      if (this.allRecords[i].level > this.allRecords[i - 1].level) {
-        result.push(this.allRecords[i].date);
-      }
+  levelUpEvents(): { date: string; level: number }[] {
+  const result: { date: string; level: number }[] = [];
+
+  for (let i = 1; i < this.allRecords.length; i++) {
+    const prev = this.allRecords[i - 1];
+    const curr = this.allRecords[i];
+
+    if (curr.level > prev.level) {
+      result.push({
+        date: curr.date,
+        level: curr.level
+      });
     }
-    return result;
   }
+
+  return result;
+}
 
   // ---------- EXP gain today ----------
   expGainTodayPercent(): number {
@@ -192,5 +203,23 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
     const [db, mb, yb] = b.split('-').map(Number);
     return new Date(ya, ma - 1, da).getTime()
          - new Date(yb, mb - 1, db).getTime();
+  }
+
+  buildLevelUpEvents() {
+    const result: { date: string; level: number }[] = [];
+
+    for (let i = 1; i < this.allRecords.length; i++) {
+      const prev = this.allRecords[i - 1];
+      const curr = this.allRecords[i];
+
+      if (curr.level > prev.level) {
+        result.push({
+          date: curr.date,
+          level: curr.level
+        });
+      }
+    }
+
+    this.levelUpList = result;
   }
 }
