@@ -5,7 +5,7 @@
 <div class="modal" (click)="$event.stopPropagation()">
 
   <div class="modal-header">
-    <h1>{{ name }}</h1>
+    <h1 class="clickable-td" (click)="openProfile(name)">{{ name }}</h1>
     <button (click)="close.emit()">✖</button>
   </div>
 

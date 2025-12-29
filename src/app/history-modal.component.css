@@ -49,3 +49,10 @@
   font-weight: 600;
   margin-left: 6px;
 }
+
+.clickable-td {
+  cursor: pointer;
+}
+.clickable-td:hover {
+  background-color: #f3f3f3;
+}

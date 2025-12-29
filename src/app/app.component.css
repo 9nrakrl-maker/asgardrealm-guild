@@ -123,3 +123,10 @@ td, th {
     min-width: 100%;
   }
 }
+
+.clickable-td {
+  cursor: pointer;
+}
+.clickable-td:hover {
+  background-color: #f3f3f3;
+}

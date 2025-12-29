@@ -222,4 +222,10 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
 
     this.levelUpList = result;
   }
+  
+  openProfile(name: string): void {
+    const url = 'https://mapleranks.com/u/' + encodeURIComponent(name);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
 }
