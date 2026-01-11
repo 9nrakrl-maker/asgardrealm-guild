@@ -2,7 +2,7 @@ name: Update Maple History & Deploy
 
 on:
   schedule:
-    - cron: '0 16 * * *'   # 23:00 Thailand
+    - cron: '30 16 * * *'   # 23:00 Thailand
   workflow_dispatch:
 
 jobs:

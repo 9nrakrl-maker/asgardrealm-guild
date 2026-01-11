@@ -27,7 +27,7 @@ function writeJSON(file, data) {
 
 // ใช้เวลาไทย (UTC+7) → dd-mm-yyyy
 function todayDMY() {
-  const now = new Date(Date.now() + 7 * 60 * 60 * 1000);
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
   const dd = String(now.getUTCDate()).padStart(2, '0');
   const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
   const yyyy = now.getUTCFullYear();
