@@ -35,12 +35,50 @@ export class AppComponent implements OnInit {
   activeDate = '';
   current: any[] = [];
 
-  ngOnInit() {
+  async ngOnInit() {
     this.today = this.formatDMY(new Date());
-    this.last7Days = this.getLastDays(7);
-    this.yesterday = this.last7Days[1];
 
-    this.last7Days.forEach(d => this.loadHistory(d));
+    await this.loadHistoryBackwards(new Date(), 365); // จำกัด max 1 ปี
+  }
+
+  async loadHistoryBackwards(startDate: Date, maxDays: number) {
+    for (let i = 0; i < maxDays; i++) {
+
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() - i);
+      const dateKey = this.formatDMY(d);
+
+      const exists = await this.tryLoadHistory(dateKey);
+
+      if (!exists) {
+        console.log('Stop at:', dateKey);
+        break; // 🔥 หยุดทันทีเมื่อไม่เจอไฟล์
+      }
+    }
+
+    console.log('Loaded days:', Object.keys(this.historyCache).length);
+  }
+
+  async tryLoadHistory(date: string): Promise<boolean> {
+    const url = `assets/data/history/${date}.json?ts=${Date.now()}`;
+
+    try {
+      const res = await fetch(url);
+
+      if (!res.ok) return false;  // ❌ ไม่เจอไฟล์ → หยุด loop
+
+      const data = await res.json();
+
+      if (data && data.length) {
+        this.historyCache[date] = data;
+        return true;
+      }
+
+      return false;
+
+    } catch {
+      return false;
+    }
   }
 
   // ---------- date helpers ----------
@@ -61,15 +99,6 @@ export class AppComponent implements OnInit {
       result.push(this.formatDMY(d));
     }
     return result;
-  }
-
-  // ---------- load history ----------
-  loadHistory(date: string) {
-    const url = `assets/data/history/${date}.json?ts=${Date.now()}`;
-    fetch(url)
-      .then(r => r.ok ? r.json() : [])
-      .then(d => this.historyCache[date] = d)
-      .catch(() => this.historyCache[date] = []);
   }
 
   // ---------- helpers ----------

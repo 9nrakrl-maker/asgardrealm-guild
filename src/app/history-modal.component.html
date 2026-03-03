@@ -33,8 +33,11 @@
     <!-- range -->
     <p>
       📊 Show data for:
-      <select [(ngModel)]="selectedRange" (change)="onRangeChange()">
-        <option *ngFor="let r of ranges" [value]="r">
+      <select [(ngModel)]="selectedRange" (ngModelChange)="onRangeChange($event)">
+        <option
+          *ngFor="let r of ranges"
+          [value]="r"
+          [disabled]="r > allRecords.length">
           {{ r }} days
         </option>
       </select>

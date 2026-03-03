@@ -8,6 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { OnChanges, SimpleChanges } from '@angular/core';
 
 interface HistoryItem {
   name: string;
@@ -25,13 +26,19 @@ interface HistoryItem {
   styleUrls: ['./history-modal.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class HistoryModalComponent implements OnInit, OnDestroy {
+export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['history'] && this.history) {
+      this.buildHistory();
+      this.buildChart();
+    }
+  }
 
   @Input() name!: string;
   @Input() history!: Record<string, HistoryItem[]>;
   @Output() close = new EventEmitter<void>();
 
-  ranges = [3, 7, 15, 30, 60, 90, 180, 360];
+  ranges = [3, 7, 15, 30, 60, 90, 180, 365];
   selectedRange = 7;
   levelUpList: { date: string; level: number }[] = [];
   allRecords: HistoryItem[] = [];
@@ -41,8 +48,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadExpTable();
-    this.buildHistory();
-    this.buildChart();
   }
 
   ngOnDestroy() {
@@ -57,12 +62,10 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
 
   buildHistory() {
     const dates = Object.keys(this.history).sort(this.sortDateAsc);
-
     this.allRecords = dates
       .map(d => this.history[d]?.find(h => h.name === this.name))
       .filter(Boolean) as HistoryItem[];
 
-    // ⭐ สำคัญมาก
     this.buildLevelUpEvents();
   }
 
@@ -105,50 +108,48 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
 
   // ---------- chart ----------
   buildChart() {
-    setTimeout(() => {
-      const canvas = document.getElementById('expChart') as HTMLCanvasElement;
-      if (!canvas) return;
+    const canvas = document.getElementById('expChart') as HTMLCanvasElement;
+    if (!canvas) return;
 
-      const data = this.recordsByRange();
+    const data = this.recordsByRange();
 
-      this.chart?.destroy();
-      this.chart = new Chart(canvas, {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.date),
-          datasets: [{
-            label: 'Level + EXP %',
-            data: data.map(d => d.value),
-            tension: 0.3,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: (ctx) => {
-                  const y = ctx.parsed?.y;
-                  if (y == null) return '';
-                  return this.formatProgress(y);
-                }
+    this.chart?.destroy();
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: data.map(d => d.date),
+        datasets: [{
+          label: 'Level + EXP %',
+          data: data.map(d => d.value),
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const y = ctx.parsed?.y;
+                if (y == null) return '';
+                return this.formatProgress(y);
               }
             }
-          },
-          scales: {
-            y: {
-              beginAtZero: false,
-              ticks: {
-                callback: (v) => {
-                  if (typeof v !== 'number') return '';
-                  return this.formatProgress(v);
-                }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: {
+              callback: (v) => {
+                if (typeof v !== 'number') return '';
+                return this.formatProgress(v);
               }
             }
           }
         }
-      });
+      }
     });
   }
 
@@ -158,7 +159,8 @@ export class HistoryModalComponent implements OnInit, OnDestroy {
     return `${level} ${percent.toFixed(3)}%`;
   }
 
-  onRangeChange() {
+  onRangeChange(range: number) {
+    this.selectedRange = +range;
     this.buildChart();
   }
 
