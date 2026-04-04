@@ -17,10 +17,8 @@ interface HistoryItem {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
   guildName = 'AsgardRealm Guild';
   expTable: Record<number, number> = expTableData as any;
-
   historyCache: Record<string, HistoryItem[]> = {};
 
   today!: string;
@@ -50,8 +48,6 @@ export class AppComponent implements OnInit {
     const list = this.getActiveList();
     if(!this.search){
       this.filteredList = list;
-      console.log(this.filteredList);
-      
       return;
     }
     const q = this.search.toLowerCase();
@@ -89,6 +85,7 @@ export class AppComponent implements OnInit {
       return false;
     }
   }
+
   formatDMY(date: Date): string {
     const dd = String(date.getDate()).padStart(2, '0');
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -108,7 +105,6 @@ export class AppComponent implements OnInit {
     return result;
   }
 
-  // ---------- helpers ----------
   getHistory(name: string, date: string): HistoryItem | undefined {
     return this.historyCache[date]?.find(x => x.name === name);
   }
@@ -149,7 +145,6 @@ export class AppComponent implements OnInit {
 
   sortedTodayList(): HistoryItem[] {
     const list = this.historyCache[this.today] || [];
-
     return [...list].sort((a, b) => {
       if (a.level !== b.level) {
         return b.level - a.level;
@@ -175,21 +170,9 @@ export class AppComponent implements OnInit {
 
     const [y, m, d] = this.selectedDate.split('-');
     const dateKey = `${d}-${m}-${y}`;
-
     this.activeDate = dateKey;
     this.loadHistoryByDate(dateKey);
     this.updatelist()
-  }
-
-  filteredAndSortedList() {
-    const list = this.getActiveList();
-
-    if (!this.search) return list;
-
-    const q = this.search.toLowerCase();
-    return list.filter(c =>
-      c.name.toLowerCase().includes(q)
-    );
   }
 
   getActiveList() {
