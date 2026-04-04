@@ -12,7 +12,7 @@ import { OnChanges, SimpleChanges } from '@angular/core';
 
 interface HistoryItem {
   name: string;
-  date: string;   // dd-mm-yyyy
+  date: string; 
   level: number;
   exp: number;
   job?: string;
@@ -55,7 +55,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     this.chart?.destroy();
   }
 
-  // ---------- load ----------
   async loadExpTable() {
     const res = await fetch('assets/data/exp-table.json');
     this.expTable = await res.json();
@@ -70,7 +69,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     this.buildLevelUpEvents();
   }
 
-  // ---------- level up ----------
   levelUpEvents(): { date: string; level: number }[] {
   const result: { date: string; level: number }[] = [];
 
@@ -85,11 +83,9 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
-
   return result;
 }
 
-  // ---------- EXP gain today ----------
   expGainTodayPercent(): number {
     if (this.allRecords.length < 2) return 0;
 
@@ -107,7 +103,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     return +(total / needY * 100).toFixed(3);
   }
 
-  // ---------- chart ----------
   buildChart() {
     const canvas = document.getElementById('expChart') as HTMLCanvasElement;
     if (!canvas) return;
@@ -181,8 +176,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       const percent = (r.exp / need) * 100;
-
-      // ⭐ level * 100 + exp%
       const value = r.level * 100 + percent;
 
       return {
@@ -192,9 +185,6 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-
-
-  // ---------- helpers ----------
   expToPercent(exp: number, level: number): number {
     const need = this.expTable[level];
     if (!need || exp <= 0) return 0;
@@ -222,14 +212,12 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
     }
-
     this.levelUpList = result;
   }
   
   openProfile(name: string): void {
     const url = 'https://mapleranks.com/u/' + encodeURIComponent(name);
     window.open(url, '_blank', 'noopener,noreferrer');
-    console.log(url);
   }
 
 }

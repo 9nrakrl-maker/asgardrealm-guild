@@ -1,17 +1,10 @@
-<!-- backdrop -->
 <div class="modal-backdrop" (click)="close.emit()"></div>
-
-<!-- modal -->
 <div class="modal" (click)="$event.stopPropagation()">
-
   <div class="modal-header">
     <h1 class="clickable-td" (click)="openProfile(name)">{{ name }}</h1>
     <button (click)="close.emit()">✖</button>
   </div>
-
   <div class="modal-body">
-
-    <!-- Level up -->
     <div *ngIf="levelUpList.length">
       <h4>📈 Level Up Dates</h4>
       <ul>
@@ -21,16 +14,12 @@
         </li>
       </ul>
     </div>
-
-    <!-- EXP today -->
     <p>
       🔥 EXP Gain Today:
       <b>{{ expGainTodayPercent() }}%</b>
     </p>
 
     <hr />
-
-    <!-- range -->
     <p>
       📊 Show data for:
       <select [(ngModel)]="selectedRange" (ngModelChange)="onRangeChange($event)">
@@ -42,8 +31,6 @@
         </option>
       </select>
     </p>
-
-    <!-- chart -->
     <canvas id="expChart" height="200"></canvas>
 
   </div>
