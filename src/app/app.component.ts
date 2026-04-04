@@ -3,9 +3,9 @@ import expTableData from '../assets/data/exp-table.json';
 
 interface HistoryItem {
   name: string;
-  date: string;   // dd-mm-yyyy
+  date: string;
   level: number;
-  exp: number;    // exp ภายในเลเวล
+  exp: number; 
   time: string;
   job?: string;
   img?: string;
@@ -19,8 +19,6 @@ interface HistoryItem {
 export class AppComponent implements OnInit {
 
   guildName = 'AsgardRealm Guild';
-
-  // 🔑 exp table ของจริง
   expTable: Record<number, number> = expTableData as any;
 
   historyCache: Record<string, HistoryItem[]> = {};
@@ -34,38 +32,50 @@ export class AppComponent implements OnInit {
   selectedDate = '';
   activeDate = '';
   current: any[] = [];
+  filteredList: any[] = [];
 
   async ngOnInit() {
     this.today = this.formatDMY(new Date());
+    let date = new Date();
+    date.setDate(date.getDate()-1)
+    this.yesterday = this.formatDMY(date);
+    await this.loadHistoryBackwards(new Date(), 365);
+    
+    const [y, m, d] = this.selectedDate.split('-');
+    const dateKey = `${d}-${m}-${y}`;
+    this.updatelist();
+  }
 
-    await this.loadHistoryBackwards(new Date(), 365); // จำกัด max 1 ปี
+  updatelist(){
+    const list = this.getActiveList();
+    if(!this.search){
+      this.filteredList = list;
+      console.log(this.filteredList);
+      
+      return;
+    }
+    const q = this.search.toLowerCase();
+    this.filteredList = list.filter(c => c.name.toLocaleLowerCase().includes(q));
   }
 
   async loadHistoryBackwards(startDate: Date, maxDays: number) {
     for (let i = 0; i < maxDays; i++) {
-
       const d = new Date(startDate);
       d.setDate(startDate.getDate() - i);
       const dateKey = this.formatDMY(d);
-
       const exists = await this.tryLoadHistory(dateKey);
-
       if (!exists) {
-        console.log('Stop at:', dateKey);
-        break; // 🔥 หยุดทันทีเมื่อไม่เจอไฟล์
+        break;
       }
     }
-
-    console.log('Loaded days:', Object.keys(this.historyCache).length);
   }
 
   async tryLoadHistory(date: string): Promise<boolean> {
     const url = `assets/data/history/${date}.json?ts=${Date.now()}`;
-
     try {
       const res = await fetch(url);
 
-      if (!res.ok) return false;  // ❌ ไม่เจอไฟล์ → หยุด loop
+      if (!res.ok) return false;
 
       const data = await res.json();
 
@@ -73,15 +83,12 @@ export class AppComponent implements OnInit {
         this.historyCache[date] = data;
         return true;
       }
-
       return false;
 
     } catch {
       return false;
     }
   }
-
-  // ---------- date helpers ----------
   formatDMY(date: Date): string {
     const dd = String(date.getDate()).padStart(2, '0');
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -112,7 +119,6 @@ export class AppComponent implements OnInit {
     return Number(((exp / max) * 100).toFixed(3));
   }
 
-  // ---------- today / yesterday ----------
   expToday(name: string): number {
     const h = this.getHistory(name, this.today);
     return h ? this.expPercent(h.level, h.exp) : 0;
@@ -123,7 +129,6 @@ export class AppComponent implements OnInit {
     return h ? this.expPercent(h.level, h.exp) : 0;
   }
 
-  // ---------- diff (logic เดิมคุณ) ----------
   diffExpPercent(name: string): number {
     const t = this.getHistory(name, this.today);
     const y = this.getHistory(name, this.yesterday);
@@ -137,36 +142,27 @@ export class AppComponent implements OnInit {
       );
     }
 
-    // level up
     const remain = 100 - this.expPercent(y.level, y.exp);
     const gain = this.expPercent(t.level, t.exp);
     return Number((remain + gain).toFixed(3));
   }
 
-  // ---------- sort แบบเดิม ----------
   sortedTodayList(): HistoryItem[] {
     const list = this.historyCache[this.today] || [];
 
     return [...list].sort((a, b) => {
-
-      // 1️⃣ เรียงตาม Level มาก → น้อย
       if (a.level !== b.level) {
         return b.level - a.level;
       }
-
-      // 2️⃣ ถ้า Level เท่ากัน เรียงตาม EXP % (today)
       const expA = this.expPercent(a.level, a.exp);
       const expB = this.expPercent(b.level, b.exp);
 
       if (expA !== expB) {
         return expB - expA;
       }
-
-      // 3️⃣ fallback (กันกระโดด)
       return a.name.localeCompare(b.name);
     });
   }
-
 
   isLevelUpToday(name: string): boolean {
     const t = this.getHistory(name, this.today);
@@ -182,10 +178,9 @@ export class AppComponent implements OnInit {
 
     this.activeDate = dateKey;
     this.loadHistoryByDate(dateKey);
+    this.updatelist()
   }
 
-
-  // 🔍 search + sort รวมกัน
   filteredAndSortedList() {
     const list = this.getActiveList();
 
@@ -201,14 +196,11 @@ export class AppComponent implements OnInit {
     if (this.activeDate && this.historyCache[this.activeDate]) {
       return this.historyCache[this.activeDate];
     }
-
-    // fallback = วันนี้ (logic เดิม)
     return this.sortedTodayList();
   }
 
   loadHistoryByDate(dateKey: string) {
   const url = `assets/data/history/${dateKey}.json?ts=${Date.now()}`;
-
   fetch(url)
     .then(res => res.ok ? res.json() : [])
     .then(data => {
@@ -216,8 +208,6 @@ export class AppComponent implements OnInit {
         ...this.historyCache,
         [dateKey]: data
       };
-
-      // ⭐ สำคัญ: เอาวันที่เลือกมาเป็น source ของตาราง
       this.current = data;
     })
     .catch(() => {
@@ -225,7 +215,6 @@ export class AppComponent implements OnInit {
     });
 }
 
-  // 🖱 modal
   openCharModal(name: string) {
     if (!Object.keys(this.historyCache).length) {
       console.warn('History not loaded yet');
@@ -239,7 +228,6 @@ export class AppComponent implements OnInit {
     this.showModal = false;
   }
 
-  // helper สำหรับ datepicker
   getLastDaysFrom(baseDate: Date, n: number): string[] {
     const result: string[] = [];
 
@@ -252,7 +240,6 @@ export class AppComponent implements OnInit {
   }
 
   formatShortDate(dateKey: string): string {
-    // dateKey = dd-mm-yyyy
     const [d, m, y] = dateKey.split('-').map(Number);
     const date = new Date(y, m - 1, d);
 

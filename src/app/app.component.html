@@ -43,7 +43,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let c of filteredAndSortedList(); let i = index"
+      <tr *ngFor="let c of filteredList; let i = index"
         class="char-row"
         [ngClass]="{ 'level-up': isLevelUpToday(c.name) }"
         (click)="openCharModal(c.name)">

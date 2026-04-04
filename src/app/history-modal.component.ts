@@ -48,6 +48,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
 
   async ngOnInit() {
     await this.loadExpTable();
+    this.onRangeChange(7);
   }
 
   ngOnDestroy() {
