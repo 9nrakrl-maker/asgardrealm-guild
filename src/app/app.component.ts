@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate()-1)
     this.yesterday = this.formatDMY(date);
-    await this.loadHistoryBackwards(new Date(), 365);
+    this.loadHistoryBackwards(new Date(), 365);
     
     const [y, m, d] = this.selectedDate.split('-');
     const dateKey = `${d}-${m}-${y}`;
@@ -59,10 +59,12 @@ export class AppComponent implements OnInit {
       const d = new Date(startDate);
       d.setDate(startDate.getDate() - i);
       const dateKey = this.formatDMY(d);
-      const exists = await this.tryLoadHistory(dateKey);
-      if (!exists) {
-        break;
-      }
+
+      this.tryLoadHistory(dateKey).then(exists => {
+        if (exists) {
+          this.updatelist();
+        }
+      });
     }
   }
 
