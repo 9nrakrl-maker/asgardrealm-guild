@@ -60,7 +60,7 @@
 
         <td align="center">
           Lv. {{ c.level }}
-          <span *ngIf="isLevelUpToday(c.name)" class="level-up-badge">▲</span>
+          <span *ngIf="isLevelUpToday(c.name)" class="level-up-badge" loading="lazy" >▲</span>
         </td>
 
         <td align="center">{{ expToday(c.name) }}%</td>
