@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import expTableData from '../assets/data/exp-table.json';
+import jobGroupsData from '../assets/data/jobs.json';
 
 interface HistoryItem {
   name: string;
   date: string;
   level: number;
-  exp: number; 
+  exp: number;
   time: string;
   job?: string;
   img?: string;
+}
+
+interface JobGroup {
+  race: string;
+  jobs: string[];
 }
 
 @Component({
@@ -18,71 +24,133 @@ interface HistoryItem {
 })
 export class AppComponent implements OnInit {
   guildName = 'AsgardRealm Guild';
-  expTable: Record<number, number> = expTableData as any;
+  expTable: Record<number, number> = expTableData as Record<number, number>;
+  jobGroups: JobGroup[] = jobGroupsData as JobGroup[];
   historyCache: Record<string, HistoryItem[]> = {};
 
   today!: string;
   yesterday!: string;
-  last7Days: string[] = [];
   search = '';
+  jobSearch = '';
+  showJobSuggestions = false;
+  showAllJobOptions = false;
   showModal = false;
   selectedChar = '';
   selectedDate = '';
   activeDate = '';
-  current: any[] = [];
-  filteredList: any[] = [];
+  current: HistoryItem[] = [];
+  filteredList: HistoryItem[] = [];
 
   async ngOnInit() {
     this.today = this.formatDMY(new Date());
-    let date = new Date();
-    date.setDate(date.getDate()-1)
-    this.yesterday = this.formatDMY(date);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    this.yesterday = this.formatDMY(yesterday);
+
+    this.updatelist();
     this.loadHistoryBackwards(new Date(), 365);
-    
-    const [y, m, d] = this.selectedDate.split('-');
-    const dateKey = `${d}-${m}-${y}`;
+  }
+
+  updatelist() {
+    const search = this.search.trim().toLocaleLowerCase();
+
+    this.filteredList = this.sortCharacters(this.getActiveList()).filter(character =>
+      (!search || character.name.toLocaleLowerCase().includes(search)) &&
+      this.matchesJobSearch(character)
+    );
+  }
+
+  matchesJobSearch(character: HistoryItem): boolean {
+    const query = this.jobSearch.trim().toLocaleLowerCase();
+    if (!query) return true;
+
+    const race = this.jobGroups.find(group => group.jobs.includes(character.job || ''))?.race || '';
+    return character.job?.toLocaleLowerCase().includes(query) || race.toLocaleLowerCase().includes(query) || false;
+  }
+
+  get matchingJobGroups(): JobGroup[] {
+    const query = this.jobSearch.trim().toLocaleLowerCase();
+    if (!query) return this.showAllJobOptions ? this.jobGroups : [];
+
+    return this.jobGroups.filter(group =>
+      group.race.toLocaleLowerCase().includes(query) ||
+      group.jobs.some(job => job.toLocaleLowerCase().includes(query))
+    );
+  }
+
+  jobsForGroup(group: JobGroup): string[] {
+    const query = this.jobSearch.trim().toLocaleLowerCase();
+    return !query || group.race.toLocaleLowerCase().includes(query)
+      ? group.jobs
+      : group.jobs.filter(job => job.toLocaleLowerCase().includes(query));
+  }
+
+  onJobSearchChange() {
+    this.showJobSuggestions = true;
+    this.showAllJobOptions = false;
     this.updatelist();
   }
 
-  updatelist(){
-    const list = this.getActiveList();
-    if(!this.search){
-      this.filteredList = list;
-      return;
-    }
-    const q = this.search.toLowerCase();
-    this.filteredList = list.filter(c => c.name.toLocaleLowerCase().includes(q));
+  toggleJobSuggestions() {
+    this.showJobSuggestions = !this.showJobSuggestions;
+    this.showAllJobOptions = this.showJobSuggestions && !this.jobSearch.trim();
+  }
+
+  selectRace(race: string) {
+    this.jobSearch = race;
+    this.showJobSuggestions = false;
+    this.showAllJobOptions = false;
+    this.updatelist();
+  }
+
+  selectJob(job: string) {
+    this.jobSearch = job;
+    this.showJobSuggestions = false;
+    this.showAllJobOptions = false;
+    this.updatelist();
+  }
+
+  clearJobSearch() {
+    this.jobSearch = '';
+    this.showJobSuggestions = false;
+    this.showAllJobOptions = false;
+    this.updatelist();
+  }
+
+  sortCharacters(list: HistoryItem[]): HistoryItem[] {
+    return [...list].sort((a, b) => {
+      if (a.level !== b.level) return b.level - a.level;
+
+      const expA = this.expPercent(a.level, a.exp);
+      const expB = this.expPercent(b.level, b.exp);
+      if (expA !== expB) return expB - expA;
+
+      return a.name.localeCompare(b.name);
+    });
   }
 
   async loadHistoryBackwards(startDate: Date, maxDays: number) {
     for (let i = 0; i < maxDays; i++) {
-      const d = new Date(startDate);
-      d.setDate(startDate.getDate() - i);
-      const dateKey = this.formatDMY(d);
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() - i);
+      const dateKey = this.formatDMY(date);
 
       this.tryLoadHistory(dateKey).then(exists => {
-        if (exists) {
-          this.updatelist();
-        }
+        if (exists) this.updatelist();
       });
     }
   }
 
   async tryLoadHistory(date: string): Promise<boolean> {
-    const url = `assets/data/history/${date}.json?ts=${Date.now()}`;
     try {
-      const res = await fetch(url);
+      const response = await fetch(`assets/data/history/${date}.json?ts=${Date.now()}`);
+      if (!response.ok) return false;
 
-      if (!res.ok) return false;
+      const data = await response.json() as HistoryItem[];
+      if (!data?.length) return false;
 
-      const data = await res.json();
-
-      if (data && data.length) {
-        this.historyCache[date] = data;
-        return true;
-      }
-      return false;
-
+      this.historyCache[date] = data;
+      return true;
     } catch {
       return false;
     }
@@ -91,120 +159,75 @@ export class AppComponent implements OnInit {
   formatDMY(date: Date): string {
     const dd = String(date.getDate()).padStart(2, '0');
     const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const yyyy = date.getFullYear();
-    return `${dd}-${mm}-${yyyy}`;
-  }
-
-  getLastDays(n: number): string[] {
-    const result: string[] = [];
-    const base = new Date();
-
-    for (let i = 0; i < n; i++) {
-      const d = new Date(base);
-      d.setDate(base.getDate() - i);
-      result.push(this.formatDMY(d));
-    }
-    return result;
+    return `${dd}-${mm}-${date.getFullYear()}`;
   }
 
   getHistory(name: string, date: string): HistoryItem | undefined {
-    return this.historyCache[date]?.find(x => x.name === name);
+    return this.historyCache[date]?.find(item => item.name === name);
   }
 
   expPercent(level: number, exp: number): number {
     const max = this.expTable[level];
-    if (!max || max <= 0) return 0;
-    return Number(((exp / max) * 100).toFixed(3));
+    return !max || max <= 0 ? 0 : Number(((exp / max) * 100).toFixed(3));
   }
 
   expToday(name: string): number {
-    const h = this.getHistory(name, this.today);
-    return h ? this.expPercent(h.level, h.exp) : 0;
+    const history = this.getHistory(name, this.todayKey);
+    return history ? this.expPercent(history.level, history.exp) : 0;
   }
 
   expYesterday(name: string): number {
-    const h = this.getHistory(name, this.yesterday);
-    return h ? this.expPercent(h.level, h.exp) : 0;
+    const history = this.getHistory(name, this.yesterdayKey);
+    return history ? this.expPercent(history.level, history.exp) : 0;
   }
 
   diffExpPercent(name: string): number {
-    const t = this.getHistory(name, this.today);
-    const y = this.getHistory(name, this.yesterday);
+    const today = this.getHistory(name, this.todayKey);
+    const yesterday = this.getHistory(name, this.yesterdayKey);
+    if (!today || !yesterday) return 0;
 
-    if (!t || !y) return 0;
-
-    if (t.level === y.level) {
-      return Number(
-        (this.expPercent(t.level, t.exp)
-       - this.expPercent(y.level, y.exp)).toFixed(3)
-      );
+    if (today.level === yesterday.level) {
+      return Number((this.expPercent(today.level, today.exp) - this.expPercent(yesterday.level, yesterday.exp)).toFixed(3));
     }
 
-    const remain = 100 - this.expPercent(y.level, y.exp);
-    const gain = this.expPercent(t.level, t.exp);
-    return Number((remain + gain).toFixed(3));
-  }
-
-  sortedTodayList(): HistoryItem[] {
-    const list = this.historyCache[this.today] || [];
-    return [...list].sort((a, b) => {
-      if (a.level !== b.level) {
-        return b.level - a.level;
-      }
-      const expA = this.expPercent(a.level, a.exp);
-      const expB = this.expPercent(b.level, b.exp);
-
-      if (expA !== expB) {
-        return expB - expA;
-      }
-      return a.name.localeCompare(b.name);
-    });
+    return Number((100 - this.expPercent(yesterday.level, yesterday.exp) + this.expPercent(today.level, today.exp)).toFixed(3));
   }
 
   isLevelUpToday(name: string): boolean {
-    const t = this.getHistory(name, this.today);
-    const y = this.getHistory(name, this.yesterday);
-    return !!(t && y && t.level > y.level);
+    const today = this.getHistory(name, this.todayKey);
+    const yesterday = this.getHistory(name, this.yesterdayKey);
+    return !!(today && yesterday && today.level > yesterday.level);
   }
 
   onDateChange() {
     if (!this.selectedDate) return;
 
-    const [y, m, d] = this.selectedDate.split('-');
-    const dateKey = `${d}-${m}-${y}`;
+    const [year, month, day] = this.selectedDate.split('-');
+    const dateKey = `${day}-${month}-${year}`;
     this.activeDate = dateKey;
     this.loadHistoryByDate(dateKey);
-    this.updatelist()
   }
 
-  getActiveList() {
-    if (this.activeDate && this.historyCache[this.activeDate]) {
-      return this.historyCache[this.activeDate];
-    }
-    return this.sortedTodayList();
+  getActiveList(): HistoryItem[] {
+    return this.activeDate ? (this.historyCache[this.activeDate] || []) : (this.historyCache[this.today] || []);
   }
 
   loadHistoryByDate(dateKey: string) {
-  const url = `assets/data/history/${dateKey}.json?ts=${Date.now()}`;
-  fetch(url)
-    .then(res => res.ok ? res.json() : [])
-    .then(data => {
-      this.historyCache = {
-        ...this.historyCache,
-        [dateKey]: data
-      };
-      this.current = data;
-    })
-    .catch(() => {
-      this.current = [];
-    });
-}
+    fetch(`assets/data/history/${dateKey}.json?ts=${Date.now()}`)
+      .then(response => response.ok ? response.json() : [])
+      .then((data: HistoryItem[]) => {
+        this.historyCache = { ...this.historyCache, [dateKey]: data };
+        this.current = data;
+        this.updatelist();
+      })
+      .catch(() => {
+        this.current = [];
+        this.updatelist();
+      });
+  }
 
   openCharModal(name: string) {
-    if (!Object.keys(this.historyCache).length) {
-      console.warn('History not loaded yet');
-      return;
-    }
+    if (!Object.keys(this.historyCache).length) return;
     this.selectedChar = name;
     this.showModal = true;
   }
@@ -213,51 +236,23 @@ export class AppComponent implements OnInit {
     this.showModal = false;
   }
 
-  getLastDaysFrom(baseDate: Date, n: number): string[] {
-    const result: string[] = [];
-
-    for (let i = 0; i < n; i++) {
-      const d = new Date(baseDate);
-      d.setDate(baseDate.getDate() - i);
-      result.push(this.formatDMY(d));
-    }
-    return result;
-  }
-
   formatShortDate(dateKey: string): string {
-    const [d, m, y] = dateKey.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short'
-    });
+    const [day, month, year] = dateKey.split('-').map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
   }
-  
+
   get todayKey(): string {
-    if (this.activeDate) return this.activeDate;
-    return this.getDateKey(new Date());
+    return this.activeDate || this.today;
   }
 
   get yesterdayKey(): string {
-    const base = this.activeDate
-      ? this.parseDateKey(this.activeDate)
-      : new Date();
-
-    const d = new Date(base);
-    d.setDate(d.getDate() - 1);
-    return this.getDateKey(d);
-  }
-
-  getDateKey(d: Date): string {
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    return `${dd}-${mm}-${yyyy}`;
+    const date = this.activeDate ? this.parseDateKey(this.activeDate) : new Date();
+    date.setDate(date.getDate() - 1);
+    return this.formatDMY(date);
   }
 
   parseDateKey(key: string): Date {
-    const [dd, mm, yyyy] = key.split('-').map(Number);
-    return new Date(yyyy, mm - 1, dd);
+    const [day, month, year] = key.split('-').map(Number);
+    return new Date(year, month - 1, day);
   }
 }
