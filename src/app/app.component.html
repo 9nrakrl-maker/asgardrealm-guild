@@ -70,7 +70,11 @@
       <input
         type="date"
         [(ngModel)]="selectedDate"
+        [max]="maxSelectableDate"
         (change)="onDateChange()"
+        (blur)="onDateChange()"
+        lang="th-TH"
+        aria-label="เลือกวันที่"
       />
     </div>
   </div>
@@ -87,8 +91,8 @@
         <th width="100">Character</th>
         <th width="150">Job</th>
         <th width="100">Level</th>
-        <th width="100">{{ formatShortDate(todayKey) }}</th>
-        <th width="100">{{ formatShortDate(yesterdayKey) }}</th>
+        <th width="100">{{ formatThaiDate(todayKey) }}</th>
+        <th width="100">{{ formatThaiDate(yesterdayKey) }}</th>
         <th width="100">Difference</th>
       </tr>
     </thead>

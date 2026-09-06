@@ -41,6 +41,10 @@
   background: #29262d;
 }
 
+.filter-bar .date-filter {
+  flex-wrap: wrap;
+}
+
 .filter-item .icon {
   flex: 0 0 auto;
 }
@@ -67,6 +71,13 @@
 .filter-item select:focus {
   border-color: #d879b7;
   box-shadow: 0 0 0 3px rgba(216, 121, 183, 0.2);
+}
+
+.selected-date {
+  width: 100%;
+  padding-left: 28px;
+  color: #d8d1dc;
+  font-size: 0.85rem;
 }
 
 .job-search {
