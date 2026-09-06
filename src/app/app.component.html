@@ -126,5 +126,6 @@
   *ngIf="showModal"
   [name]="selectedChar"
   [history]="historyCache"
+  (rangeRequested)="loadHistoryForModal($event)"
   (close)="closeModal()">
 </app-history-modal>

@@ -36,6 +36,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() name!: string;
   @Input() history!: Record<string, HistoryItem[]>;
+  @Output() rangeRequested = new EventEmitter<number>();
   @Output() close = new EventEmitter<void>();
 
   ranges = [3, 7, 15, 30, 60, 90, 180, 365];
@@ -48,6 +49,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
 
   async ngOnInit() {
     await this.loadExpTable();
+    this.buildHistory();
     this.onRangeChange(7);
   }
 
@@ -158,6 +160,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   onRangeChange(range: number) {
     this.selectedRange = +range;
     this.buildChart();
+    this.rangeRequested.emit(this.selectedRange);
   }
 
  recordsByRange(): {

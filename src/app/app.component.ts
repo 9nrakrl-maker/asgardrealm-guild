@@ -44,12 +44,12 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.today = this.formatDMY(new Date());
+    this.selectedDate = this.maxSelectableDate;
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     this.yesterday = this.formatDMY(yesterday);
 
-    this.updatelist();
-    this.loadHistoryBackwards(new Date(), 365);
+    await this.loadHistoryBackwards(new Date(), 2);
   }
 
   updatelist() {
@@ -66,12 +66,26 @@ export class AppComponent implements OnInit {
     if (!query) return true;
 
     const race = this.jobGroups.find(group => group.jobs.includes(character.job || ''))?.race || '';
+    const hasExactJobMatch = this.jobGroups.some(group =>
+      group.jobs.some(job => job.toLocaleLowerCase() === query)
+    );
+
+    // Prioritize an exact job name over a similarly named race (e.g. Hero vs Heroes).
+    if (hasExactJobMatch) {
+      return character.job?.toLocaleLowerCase() === query || false;
+    }
+
     return character.job?.toLocaleLowerCase().includes(query) || race.toLocaleLowerCase().includes(query) || false;
   }
 
   get matchingJobGroups(): JobGroup[] {
     const query = this.jobSearch.trim().toLocaleLowerCase();
     if (!query) return this.showAllJobOptions ? this.jobGroups : [];
+
+    const exactJobGroups = this.jobGroups.filter(group =>
+      group.jobs.some(job => job.toLocaleLowerCase() === query)
+    );
+    if (exactJobGroups.length) return exactJobGroups;
 
     return this.jobGroups.filter(group =>
       group.race.toLocaleLowerCase().includes(query) ||
@@ -131,18 +145,20 @@ export class AppComponent implements OnInit {
   }
 
   async loadHistoryBackwards(startDate: Date, maxDays: number) {
+    const dates: string[] = [];
     for (let i = 0; i < maxDays; i++) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() - i);
-      const dateKey = this.formatDMY(date);
-
-      this.tryLoadHistory(dateKey).then(exists => {
-        if (exists) this.updatelist();
-      });
+      dates.push(this.formatDMY(date));
     }
+
+    await Promise.all(dates.map(date => this.tryLoadHistory(date)));
+    this.updatelist();
   }
 
   async tryLoadHistory(date: string): Promise<boolean> {
+    if (this.historyCache[date]) return true;
+
     try {
       const response = await fetch(`assets/data/history/${date}.json?ts=${Date.now()}`);
       if (!response.ok) return false;
@@ -150,7 +166,7 @@ export class AppComponent implements OnInit {
       const data = await response.json() as HistoryItem[];
       if (!data?.length) return false;
 
-      this.historyCache[date] = data;
+      this.historyCache = { ...this.historyCache, [date]: data };
       return true;
     } catch {
       return false;
@@ -230,18 +246,15 @@ export class AppComponent implements OnInit {
     return this.activeDate ? (this.historyCache[this.activeDate] || []) : (this.historyCache[this.today] || []);
   }
 
-  loadHistoryByDate(dateKey: string) {
-    fetch(`assets/data/history/${dateKey}.json?ts=${Date.now()}`)
-      .then(response => response.ok ? response.json() : [])
-      .then((data: HistoryItem[]) => {
-        this.historyCache = { ...this.historyCache, [dateKey]: data };
-        this.current = data;
-        this.updatelist();
-      })
-      .catch(() => {
-        this.current = [];
-        this.updatelist();
-      });
+  async loadHistoryByDate(dateKey: string) {
+    const exists = await this.tryLoadHistory(dateKey);
+    this.current = exists ? this.historyCache[dateKey] : [];
+    this.updatelist();
+  }
+
+  loadHistoryForModal(days: number) {
+    const startDate = this.activeDate ? this.parseDateKey(this.activeDate) : new Date();
+    this.loadHistoryBackwards(startDate, days);
   }
 
   openCharModal(name: string) {
