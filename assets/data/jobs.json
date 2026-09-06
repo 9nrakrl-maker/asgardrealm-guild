@@ -1,0 +1,69 @@
+[
+  {
+    "race": "Explorer",
+    "jobs": [
+      "Hero",
+      "Paladin",
+      "Dark Knight",
+      "Arch Mage (Fire/Poison)",
+      "Arch Mage (Ice/Lightning)",
+      "Bishop",
+      "Bowmaster",
+      "Marksman",
+      "Pathfinder",
+      "Night Lord",
+      "Shadower",
+      "Dual Blade",
+      "Buccaneer",
+      "Corsair",
+      "Cannoneer"
+    ]
+  },
+  {
+    "race": "Cygnus Knights",
+    "jobs": [
+      "Dawn Warrior",
+      "Blaze Wizard",
+      "Wind Archer",
+      "Night Walker",
+      "Thunder Breaker",
+      "Mihile"
+    ]
+  },
+  {
+    "race": "Heroes",
+    "jobs": ["Aran", "Evan", "Mercedes", "Phantom", "Luminous", "Shade"]
+  },
+  {
+    "race": "Resistance",
+    "jobs": ["Battle Mage", "Wild Hunter", "Mechanic", "Blaster", "Xenon"]
+  },
+  {
+    "race": "Demon",
+    "jobs": ["Demon Slayer", "Demon Avenger"]
+  },
+  {
+    "race": "Nova",
+    "jobs": ["Kaiser", "Angelic Buster", "Cadena", "Kain"]
+  },
+  {
+    "race": "Flora",
+    "jobs": ["Illium", "Ark", "Adele", "Khali"]
+  },
+  {
+    "race": "Anima",
+    "jobs": ["Hoyoung", "Lara", "Lynn"]
+  },
+  {
+    "race": "Child of God",
+    "jobs": ["Zero"]
+  },
+  {
+    "race": "Friends World",
+    "jobs": ["Kinesis"]
+  },
+  {
+    "race": "Sengoku / Regional",
+    "jobs": ["Hayato", "Kanna", "Beast Tamer", "Jett", "Mo Xuan"]
+  }
+]
