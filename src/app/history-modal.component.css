@@ -20,6 +20,11 @@
 .summary-card p { margin: 0; color: #8695b4; font-size: .82rem; }
 .chart-heading { align-items: flex-end; gap: 16px; margin: 26px 0 12px; }
 .chart-heading h2 { margin: 0; font-size: 1.05rem; }
+.chart-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.chart-stats div { min-width: 0; padding: 10px 12px; border: 1px solid #2d3954; border-radius: 10px; background: rgba(9, 14, 25, .36); }
+.chart-stats span, .chart-stats small { display: block; color: #8190ad; font-size: .67rem; font-weight: 650; }
+.chart-stats strong { display: block; overflow: hidden; margin-top: 4px; color: #dce8ff; font-size: .88rem; text-overflow: ellipsis; white-space: nowrap; }
+.chart-stats small { margin-top: 3px; color: #55dccc; }
 .range-picker { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid #35425f; border-radius: 10px; background: #101724; }
 .range-picker button { min-width: 48px; padding: 7px 8px; border: 0; border-radius: 7px; background: transparent; color: #9aa8c5; font: inherit; font-size: .76rem; font-weight: 700; cursor: pointer; }
 .range-picker button:hover { color: #eff4ff; }
@@ -32,4 +37,4 @@
 .level-up-list b { color: #52dfae; }
 .clickable-td { cursor: pointer; }
 .clickable-td:hover { color: #62dfff; }
-@media (max-width: 520px) { .modal { padding: 18px; border-radius: 18px; } .chart-heading, .level-up-section { align-items: flex-start; flex-direction: column; } .chart-card { height: 260px; } }
+@media (max-width: 520px) { .modal { padding: 18px; border-radius: 18px; } .chart-heading, .level-up-section { align-items: flex-start; flex-direction: column; } .chart-stats { grid-template-columns: 1fr; } .chart-card { height: 260px; } }

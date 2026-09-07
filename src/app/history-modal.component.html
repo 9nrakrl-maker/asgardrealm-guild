@@ -15,8 +15,13 @@
     </div>
 
     <div class="chart-heading">
-      <div><p class="chart-kicker">HISTORY RANGE</p><h2>Daily EXP earned</h2></div>
+      <div><p class="chart-kicker">HISTORY RANGE</p><h2>{{ chartTitle }}</h2></div>
       <div class="range-picker" aria-label="History range"><button *ngFor="let r of quickRanges" type="button" [class.active]="selectedRange === r.value" (click)="onRangeChange(r.value)">{{ r.label }}</button></div>
+    </div>
+    <div class="chart-stats" *ngIf="chartData.length">
+      <div><span>Total earned</span><strong>{{ formatExp(totalChartExp) }}</strong></div>
+      <div><span>Daily average</span><strong>{{ formatExp(averageDailyExp) }}</strong></div>
+      <div><span>Best period</span><strong>{{ peakChartPoint?.date || '—' }}</strong><small>{{ peakChartPoint ? formatExp(peakChartPoint.value) : '' }}</small></div>
     </div>
     <div class="chart-card"><canvas id="expChart" height="210"></canvas></div>
     <div class="level-up-section" *ngIf="levelUpList.length"><span class="level-up-label">LEVEL UPS</span><div class="level-up-list"><span *ngFor="let e of levelUpList.slice(-4)">{{ e.date }} <b>Lv. {{ e.level }}</b></span></div></div>

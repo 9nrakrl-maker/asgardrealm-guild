@@ -20,6 +20,12 @@ interface HistoryItem {
   time: string;
 }
 
+interface ChartPoint {
+  date: string;
+  value: number;
+  days: number;
+}
+
 @Component({
   selector: 'app-history-modal',
   templateUrl: './history-modal.component.html',
@@ -51,6 +57,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   expTable: Record<number, number> = {};
 
   chart?: Chart;
+  chartData: ChartPoint[] = [];
 
   async ngOnInit() {
     await this.loadExpTable();
@@ -131,6 +138,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     if (!canvas) return;
 
     const data = this.recordsByRange();
+    this.chartData = data;
     const dailyExpLabels: any = {
       id: 'dailyExpLabels',
       afterDatasetsDraw: (chart: Chart) => {
@@ -140,13 +148,19 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
 
         context.save();
         context.fillStyle = '#d8efff';
-        context.font = '700 11px Inter, system-ui, sans-serif';
+        const isWeeklyView = this.selectedRange === 90 || this.selectedRange === 180;
+        const isMonthlyView = this.selectedRange >= 365 || this.selectedRange === -1;
+        const denseLabelView = this.selectedRange === 30 || this.selectedRange === 180;
+        const showValues = this.selectedRange === 7 || this.selectedRange === 30 || isWeeklyView || isMonthlyView;
+        context.font = denseLabelView
+          ? '700 8px Inter, system-ui, sans-serif'
+          : '700 11px Inter, system-ui, sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'bottom';
         bars.forEach((bar: any, index: number) => {
           const value = values[index];
-          if (value <= 0) return;
-          context.fillText(this.formatExpLabel(value), bar.x, bar.y - 7);
+          if (value <= 0 || !showValues) return;
+          context.fillText(this.formatExpLabel(value, denseLabelView ? 0 : 2), bar.x, bar.y - 4);
         });
         context.restore();
       }
@@ -215,17 +229,79 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     this.rangeRequested.emit(this.selectedRange === -1 ? -1 : this.selectedRange + 1);
   }
 
- recordsByRange(): {
+  recordsByRange(): {
     date: string;
     value: number;
+    days: number;
   }[] {
     const startIndex = this.selectedRange === -1
       ? 1
       : Math.max(1, this.allRecords.length - this.selectedRange);
-    return this.allRecords.slice(startIndex).map((record, index) => ({
+    const dailyData = this.allRecords.slice(startIndex).map((record, index) => ({
       date: record.date,
-      value: this.expGainBetween(this.allRecords[startIndex + index - 1], record)
+      value: this.expGainBetween(this.allRecords[startIndex + index - 1], record),
+      days: 1
     }));
+
+    if (this.selectedRange === 90 || this.selectedRange === 180) return this.aggregateChartData(dailyData, 'week');
+    if (this.selectedRange >= 365 || this.selectedRange === -1) return this.aggregateChartData(dailyData, 'month');
+    return dailyData;
+  }
+
+  get totalChartExp(): number { return this.chartData.reduce((sum, point) => sum + point.value, 0); }
+
+  get averageDailyExp(): number {
+    const days = this.chartData.reduce((sum, point) => sum + point.days, 0);
+    return days ? this.totalChartExp / days : 0;
+  }
+
+  get peakChartPoint(): ChartPoint | undefined {
+    return this.chartData.reduce<ChartPoint | undefined>((peak, point) => !peak || point.value > peak.value ? point : peak, undefined);
+  }
+
+  get chartTitle(): string {
+    if (this.selectedRange === 90 || this.selectedRange === 180) return 'Weekly EXP earned';
+    if (this.selectedRange >= 365 || this.selectedRange === -1) return 'Monthly EXP earned';
+    return 'Daily EXP earned';
+  }
+
+  aggregateChartData(data: ChartPoint[], interval: 'week' | 'month'): ChartPoint[] {
+    const groups = new Map<string, { value: number; days: number; first: Date; last: Date }>();
+
+    for (const point of data) {
+      const date = this.parseHistoryDate(point.date);
+      const keyDate = new Date(date);
+      if (interval === 'week') {
+        const mondayOffset = (keyDate.getDay() + 6) % 7;
+        keyDate.setDate(keyDate.getDate() - mondayOffset);
+      } else {
+        keyDate.setDate(1);
+      }
+      const key = `${keyDate.getFullYear()}-${keyDate.getMonth()}-${keyDate.getDate()}`;
+      const group = groups.get(key) || { value: 0, days: 0, first: date, last: date };
+      group.value += point.value;
+      group.days += point.days;
+      if (date < group.first) group.first = date;
+      if (date > group.last) group.last = date;
+      groups.set(key, group);
+    }
+
+    return Array.from(groups.values()).map(group => ({
+      value: group.value,
+      days: group.days,
+      date: interval === 'month'
+        ? group.first.toLocaleDateString('en-GB', { month: 'short', year: '2-digit' })
+        : `${this.formatAxisDate(group.first)}–${this.formatAxisDate(group.last)}`
+    }));
+  }
+
+  parseHistoryDate(dateKey: string): Date {
+    const [day, month, year] = dateKey.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  formatAxisDate(date: Date): string {
+    return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
   }
 
   /** Total EXP earned between two snapshots, including all levels crossed. */
@@ -257,7 +333,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /** Fixed two-decimal compact format for the value rendered above each bar. */
-  formatExpLabel(value: number): string {
+  formatExpLabel(value: number, decimals = 2): string {
     const units = [
       { value: 1e15, suffix: 'P' },
       { value: 1e12, suffix: 'T' },
@@ -267,7 +343,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     ];
     const unit = units.find(candidate => value >= candidate.value);
     return unit
-      ? `${(value / unit.value).toFixed(2)}${unit.suffix}`
+      ? `${(value / unit.value).toFixed(decimals)}${unit.suffix}`
       : Math.round(value).toLocaleString('en-US');
   }
 
