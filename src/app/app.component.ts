@@ -274,8 +274,38 @@ export class AppComponent implements OnInit {
   }
 
   loadHistoryForModal(days: number) {
+    if (days === -1) {
+      this.loadAllHistoryForModal();
+      return;
+    }
+
     const startDate = this.activeDate ? this.parseDateKey(this.activeDate) : new Date();
     this.loadHistoryBackwards(startDate, days);
+  }
+
+  /** Load every contiguous snapshot for the modal, ending after two weeks without data. */
+  async loadAllHistoryForModal() {
+    const startDate = this.activeDate ? this.parseDateKey(this.activeDate) : new Date();
+    const batchSize = 30;
+    const maxDays = 3650;
+    let foundSnapshot = false;
+    let consecutiveMisses = 0;
+
+    for (let offset = 0; offset < maxDays && (!foundSnapshot || consecutiveMisses < 14); offset += batchSize) {
+      const dates = Array.from({ length: Math.min(batchSize, maxDays - offset) }, (_, index) => {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() - offset - index);
+        return this.formatDMY(date);
+      });
+      const results = await Promise.all(dates.map(date => this.tryLoadHistory(date)));
+
+      for (const exists of results) {
+        foundSnapshot ||= exists;
+        consecutiveMisses = exists ? 0 : consecutiveMisses + 1;
+      }
+    }
+
+    this.updatelist();
   }
 
   openCharModal(name: string) {

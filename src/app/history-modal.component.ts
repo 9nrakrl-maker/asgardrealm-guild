@@ -40,7 +40,11 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   @Output() close = new EventEmitter<void>();
 
   ranges = [3, 7, 15, 30, 60, 90, 180, 365];
-  quickRanges = [7, 30, 90];
+  quickRanges = [
+    { value: 7, label: '7D' }, { value: 30, label: '30D' },
+    { value: 90, label: '90D' }, { value: 180, label: '180D' },
+    { value: 365, label: '365D' }, { value: -1, label: 'ALL' }
+  ];
   selectedRange = 7;
   levelUpList: { date: string; level: number }[] = [];
   allRecords: HistoryItem[] = [];
@@ -112,60 +116,89 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     return this.latestRecord ? this.expToPercent(this.latestRecord.exp, this.latestRecord.level).toFixed(3) : '0.000';
   }
 
-  get progressWidth(): number { return Math.min(100, Math.max(0, this.expGainTodayPercent())); }
+  get progressWidth(): number {
+    return this.latestRecord
+      ? Math.min(100, Math.max(0, this.expToPercent(this.latestRecord.exp, this.latestRecord.level)))
+      : 0;
+  }
+
+  get latestDailyExp(): number {
+    return this.allRecords.length < 2 ? 0 : this.expGainBetween(this.allRecords[this.allRecords.length - 2], this.allRecords[this.allRecords.length - 1]);
+  }
 
   buildChart() {
     const canvas = document.getElementById('expChart') as HTMLCanvasElement;
     if (!canvas) return;
 
     const data = this.recordsByRange();
+    const dailyExpLabels: any = {
+      id: 'dailyExpLabels',
+      afterDatasetsDraw: (chart: Chart) => {
+        const context = chart.ctx;
+        const bars = chart.getDatasetMeta(0).data;
+        const values = data.map(item => item.value);
+
+        context.save();
+        context.fillStyle = '#d8efff';
+        context.font = '700 11px Inter, system-ui, sans-serif';
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom';
+        bars.forEach((bar: any, index: number) => {
+          const value = values[index];
+          if (value <= 0) return;
+          context.fillText(this.formatExpLabel(value), bar.x, bar.y - 7);
+        });
+        context.restore();
+      }
+    };
 
     this.chart?.destroy();
     this.chart = new Chart(canvas, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: data.map(d => d.date),
         datasets: [{
-          label: 'Level + EXP %',
+          label: 'EXP gained',
           data: data.map(d => d.value),
-          tension: 0.3,
-          fill: true,
-          borderColor: '#4fd7ff', backgroundColor: 'rgba(79, 215, 255, .16)', borderWidth: 3,
-          pointBackgroundColor: '#b8f2ff', pointBorderColor: '#4fd7ff', pointBorderWidth: 2,
-          pointRadius: 3, pointHoverRadius: 6
+          backgroundColor: 'rgba(79, 215, 255, .72)', hoverBackgroundColor: '#8beaff', borderColor: '#72e4ff',
+          borderWidth: 1, borderRadius: 7, borderSkipped: false, maxBarThickness: 44
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: { padding: { top: 24 } },
         plugins: {
-          legend: { labels: { color: '#b7c4df', boxWidth: 12, usePointStyle: true, pointStyle: 'circle' } },
+          // The section heading already names this series; removing the legend
+          // leaves clear space for values above tall bars.
+          legend: { display: false },
           tooltip: {
             backgroundColor: '#151c2b', titleColor: '#f3f7ff', bodyColor: '#b7c4df', borderColor: '#384867', borderWidth: 1,
             callbacks: {
               label: (ctx) => {
                 const y = ctx.parsed?.y;
                 if (y == null) return '';
-                return this.formatProgress(y);
+                return `EXP gained: ${this.formatExp(y)} (${Math.round(y).toLocaleString('en-US')} EXP)`;
               }
             }
           }
         },
         scales: {
           y: {
-            beginAtZero: false,
+            beginAtZero: true,
             grid: { color: 'rgba(131, 148, 184, .14)' }, border: { display: false },
             ticks: {
               color: '#8795b3',
               callback: (v) => {
                 if (typeof v !== 'number') return '';
-                return this.formatProgress(v);
+                return this.formatExp(v);
               }
             }
           },
           x: { grid: { color: 'rgba(131, 148, 184, .10)' }, border: { display: false }, ticks: { color: '#8795b3', maxRotation: 0, autoSkip: true, maxTicksLimit: 7 } }
         }
-      }
+      },
+      plugins: [dailyExpLabels]
     });
   }
 
@@ -178,32 +211,64 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   onRangeChange(range: number) {
     this.selectedRange = +range;
     this.buildChart();
-    this.rangeRequested.emit(this.selectedRange);
+    // One extra snapshot makes a selected N-day range contain N daily gains.
+    this.rangeRequested.emit(this.selectedRange === -1 ? -1 : this.selectedRange + 1);
   }
 
  recordsByRange(): {
     date: string;
     value: number;
   }[] {
-    const slice = this.allRecords.slice(-this.selectedRange);
+    const startIndex = this.selectedRange === -1
+      ? 1
+      : Math.max(1, this.allRecords.length - this.selectedRange);
+    return this.allRecords.slice(startIndex).map((record, index) => ({
+      date: record.date,
+      value: this.expGainBetween(this.allRecords[startIndex + index - 1], record)
+    }));
+  }
 
-    return slice.map(r => {
-      const need = this.expTable[r.level];
-      if (!need || need <= 0) {
-        return {
-          date: r.date,
-          value: r.level * 100
-        };
-      }
+  /** Total EXP earned between two snapshots, including all levels crossed. */
+  expGainBetween(previous: HistoryItem, current: HistoryItem): number {
+    if (current.level < previous.level) return 0;
+    if (current.level === previous.level) return Math.max(0, current.exp - previous.exp);
 
-      const percent = (r.exp / need) * 100;
-      const value = r.level * 100 + percent;
+    let gained = Math.max(0, (this.expTable[previous.level] || 0) - previous.exp);
+    for (let level = previous.level + 1; level < current.level; level++) {
+      gained += this.expTable[level] || 0;
+    }
+    return gained + Math.max(0, current.exp);
+  }
 
-      return {
-        date: r.date,
-        value: +value.toFixed(3)
-      };
-    });
+  formatExp(value: number): string {
+    const units = [
+      { value: 1e15, suffix: 'P' },
+      { value: 1e12, suffix: 'T' },
+      { value: 1e9, suffix: 'B' },
+      { value: 1e6, suffix: 'M' },
+      { value: 1e3, suffix: 'K' }
+    ];
+    const unit = units.find(candidate => value >= candidate.value);
+    if (!unit) return Math.round(value).toLocaleString('en-US');
+
+    const compact = value / unit.value;
+    const precision = compact >= 100 ? 0 : compact >= 10 ? 1 : 2;
+    return `${compact.toFixed(precision).replace(/\\.?0+$/, '')}${unit.suffix}`;
+  }
+
+  /** Fixed two-decimal compact format for the value rendered above each bar. */
+  formatExpLabel(value: number): string {
+    const units = [
+      { value: 1e15, suffix: 'P' },
+      { value: 1e12, suffix: 'T' },
+      { value: 1e9, suffix: 'B' },
+      { value: 1e6, suffix: 'M' },
+      { value: 1e3, suffix: 'K' }
+    ];
+    const unit = units.find(candidate => value >= candidate.value);
+    return unit
+      ? `${(value / unit.value).toFixed(2)}${unit.suffix}`
+      : Math.round(value).toLocaleString('en-US');
   }
 
   expToPercent(exp: number, level: number): number {

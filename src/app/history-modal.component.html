@@ -9,14 +9,14 @@
   </div>
   <div class="modal-body">
     <div class="summary-card">
-      <div class="summary-heading"><span>Today's EXP gain</span><strong [class.has-gain]="expGainTodayPercent() > 0">{{ expGainTodayPercent() }}%</strong></div>
+      <div class="summary-heading"><span>Current EXP</span><strong>{{ latestProgress }}%</strong></div>
       <div class="progress-track"><span [style.width.%]="progressWidth"></span></div>
-      <p *ngIf="latestRecord">Current progress · Lv. {{ latestRecord.level }} {{ latestProgress }}%</p>
+      <p *ngIf="latestRecord">Lv. {{ latestRecord.level }} · Gained today {{ formatExp(latestDailyExp) }} ({{ expGainTodayPercent() }}%)</p>
     </div>
 
     <div class="chart-heading">
-      <div><p class="chart-kicker">HISTORY RANGE</p><h2>Level &amp; EXP timeline</h2></div>
-      <div class="range-picker" aria-label="History range"><button *ngFor="let r of quickRanges" type="button" [class.active]="selectedRange === r" (click)="onRangeChange(r)">{{ r }}D</button></div>
+      <div><p class="chart-kicker">HISTORY RANGE</p><h2>Daily EXP earned</h2></div>
+      <div class="range-picker" aria-label="History range"><button *ngFor="let r of quickRanges" type="button" [class.active]="selectedRange === r.value" (click)="onRangeChange(r.value)">{{ r.label }}</button></div>
     </div>
     <div class="chart-card"><canvas id="expChart" height="210"></canvas></div>
     <div class="level-up-section" *ngIf="levelUpList.length"><span class="level-up-label">LEVEL UPS</span><div class="level-up-list"><span *ngFor="let e of levelUpList.slice(-4)">{{ e.date }} <b>Lv. {{ e.level }}</b></span></div></div>
