@@ -50,6 +50,7 @@ export class AppComponent implements OnInit {
     this.yesterday = this.formatDMY(yesterday);
 
     await this.loadHistoryBackwards(new Date(), 2);
+    this.useLatestLoadedDateWhenTodayIsMissing();
   }
 
   updatelist() {
@@ -153,6 +154,26 @@ export class AppComponent implements OnInit {
     }
 
     await Promise.all(dates.map(date => this.tryLoadHistory(date)));
+    this.updatelist();
+  }
+
+  /**
+   * Data is published once daily, so the browser can be ahead of the latest
+   * snapshot. In that case, show the newest available snapshot instead of an
+   * empty table.
+   */
+  useLatestLoadedDateWhenTodayIsMissing() {
+    if (this.historyCache[this.today] || this.activeDate) return;
+
+    const latestDate = Object.keys(this.historyCache).sort((a, b) =>
+      this.parseDateKey(b).getTime() - this.parseDateKey(a).getTime()
+    )[0];
+
+    if (!latestDate) return;
+
+    this.activeDate = latestDate;
+    this.selectedDate = this.formatInputDate(this.parseDateKey(latestDate));
+    this.current = this.historyCache[latestDate];
     this.updatelist();
   }
 

@@ -1,36 +1,25 @@
 <div class="modal-backdrop" (click)="close.emit()"></div>
-<div class="modal" (click)="$event.stopPropagation()">
+<section class="modal" role="dialog" aria-modal="true" aria-labelledby="history-title" (click)="$event.stopPropagation()">
   <div class="modal-header">
-    <h1 class="clickable-td" (click)="openProfile(name)">{{ name }}</h1>
-    <button (click)="close.emit()">✖</button>
+    <div class="title-group">
+      <span class="title-icon">◷</span>
+      <div><p>CHARACTER PROGRESS</p><h1 id="history-title" class="clickable-td" (click)="openProfile(name)">{{ name }}</h1></div>
+    </div>
+    <button class="close-button" type="button" (click)="close.emit()" aria-label="Close history">×</button>
   </div>
   <div class="modal-body">
-    <div *ngIf="levelUpList.length">
-      <h4>📈 Level Up Dates</h4>
-      <ul>
-        <li *ngFor="let e of levelUpList">
-          {{ e.date }}
-          <span class="level-up">({{ e.level }})</span>
-        </li>
-      </ul>
+    <div class="summary-card">
+      <div class="summary-heading"><span>Today's EXP gain</span><strong [class.has-gain]="expGainTodayPercent() > 0">{{ expGainTodayPercent() }}%</strong></div>
+      <div class="progress-track"><span [style.width.%]="progressWidth"></span></div>
+      <p *ngIf="latestRecord">Current progress · Lv. {{ latestRecord.level }} {{ latestProgress }}%</p>
     </div>
-    <p>
-      🔥 EXP Gain Today:
-      <b>{{ expGainTodayPercent() }}%</b>
-    </p>
 
-    <hr />
-    <p>
-      📊 Show data for:
-      <select [(ngModel)]="selectedRange" (ngModelChange)="onRangeChange($event)">
-        <option
-          *ngFor="let r of ranges"
-          [value]="r">
-          {{ r }} days
-        </option>
-      </select>
-    </p>
-    <canvas id="expChart" height="200"></canvas>
+    <div class="chart-heading">
+      <div><p class="chart-kicker">HISTORY RANGE</p><h2>Level &amp; EXP timeline</h2></div>
+      <div class="range-picker" aria-label="History range"><button *ngFor="let r of quickRanges" type="button" [class.active]="selectedRange === r" (click)="onRangeChange(r)">{{ r }}D</button></div>
+    </div>
+    <div class="chart-card"><canvas id="expChart" height="210"></canvas></div>
+    <div class="level-up-section" *ngIf="levelUpList.length"><span class="level-up-label">LEVEL UPS</span><div class="level-up-list"><span *ngFor="let e of levelUpList.slice(-4)">{{ e.date }} <b>Lv. {{ e.level }}</b></span></div></div>
 
   </div>
-</div>
+</section>

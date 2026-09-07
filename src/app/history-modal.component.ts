@@ -40,6 +40,7 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
   @Output() close = new EventEmitter<void>();
 
   ranges = [3, 7, 15, 30, 60, 90, 180, 365];
+  quickRanges = [7, 30, 90];
   selectedRange = 7;
   levelUpList: { date: string; level: number }[] = [];
   allRecords: HistoryItem[] = [];
@@ -105,6 +106,14 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
     return +(total / needY * 100).toFixed(3);
   }
 
+  get latestRecord(): HistoryItem | undefined { return this.allRecords[this.allRecords.length - 1]; }
+
+  get latestProgress(): string {
+    return this.latestRecord ? this.expToPercent(this.latestRecord.exp, this.latestRecord.level).toFixed(3) : '0.000';
+  }
+
+  get progressWidth(): number { return Math.min(100, Math.max(0, this.expGainTodayPercent())); }
+
   buildChart() {
     const canvas = document.getElementById('expChart') as HTMLCanvasElement;
     if (!canvas) return;
@@ -120,13 +129,19 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
           label: 'Level + EXP %',
           data: data.map(d => d.value),
           tension: 0.3,
-          fill: true
+          fill: true,
+          borderColor: '#4fd7ff', backgroundColor: 'rgba(79, 215, 255, .16)', borderWidth: 3,
+          pointBackgroundColor: '#b8f2ff', pointBorderColor: '#4fd7ff', pointBorderWidth: 2,
+          pointRadius: 3, pointHoverRadius: 6
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
+          legend: { labels: { color: '#b7c4df', boxWidth: 12, usePointStyle: true, pointStyle: 'circle' } },
           tooltip: {
+            backgroundColor: '#151c2b', titleColor: '#f3f7ff', bodyColor: '#b7c4df', borderColor: '#384867', borderWidth: 1,
             callbacks: {
               label: (ctx) => {
                 const y = ctx.parsed?.y;
@@ -139,13 +154,16 @@ export class HistoryModalComponent implements OnInit, OnDestroy, OnChanges {
         scales: {
           y: {
             beginAtZero: false,
+            grid: { color: 'rgba(131, 148, 184, .14)' }, border: { display: false },
             ticks: {
+              color: '#8795b3',
               callback: (v) => {
                 if (typeof v !== 'number') return '';
                 return this.formatProgress(v);
               }
             }
-          }
+          },
+          x: { grid: { color: 'rgba(131, 148, 184, .10)' }, border: { display: false }, ticks: { color: '#8795b3', maxRotation: 0, autoSkip: true, maxTicksLimit: 7 } }
         }
       }
     });

@@ -1,5 +1,7 @@
 body {
-  background-color: #1e1e1e; /* หรือสีพื้นหลังคุณ */
+  background-color: #0b0e14;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, Arial, Helvetica, sans-serif;
 }
+
+* { box-sizing: border-box; }

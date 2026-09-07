@@ -1,5 +1,15 @@
 <div class="container">
-  <h2>{{ guildName }}</h2>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">MAPLESTORY · GUILD TRACKER</p>
+      <h1>{{ guildName }}</h1>
+      <p class="page-subtitle">ติดตามเลเวลและ EXP ของสมาชิกกิลด์ได้ในที่เดียว</p>
+    </div>
+    <div class="update-status">
+      <span class="status-dot"></span>
+      <span>Updated daily at 01:00 AM</span>
+    </div>
+  </header>
 
   <div class="filter-bar">
     <div class="filter-item">
@@ -79,11 +89,15 @@
     </div>
   </div>
 
-  <div class="filter-item notice">
-    <span>If you need anything else, please contact NraK.</span><br />
-    <span>Updated daily at 01.00 AM.</span>
+  <div class="table-toolbar">
+    <div>
+      <p class="section-kicker">MEMBERS</p>
+      <h2>Character progress</h2>
+    </div>
+    <p class="result-count">{{ filteredList.length }} characters</p>
   </div>
 
+  <div class="table-shell">
   <table>
     <thead>
       <tr>
@@ -106,20 +120,26 @@
       >
         <td>{{ i + 1 }}</td>
         <td>
-          <img [src]="c.img" width="100" alt="{{ c.name }}" /><br />
-          <h2>{{ c.name }}</h2>
+          <div class="character-cell">
+            <img [src]="c.img" width="100" alt="{{ c.name }}" />
+            <div>
+              <h3>{{ c.name }}</h3>
+              <span>View history →</span>
+            </div>
+          </div>
         </td>
         <td>{{ c.job }}</td>
         <td>
           Lv. {{ c.level }}
           <span *ngIf="isLevelUpToday(c.name)" class="level-up-badge">▲</span>
         </td>
-        <td>{{ expToday(c.name) }}%</td>
-        <td>{{ expYesterday(c.name) }}%</td>
-        <td>{{ diffExpPercent(c.name) }}%</td>
+        <td><span class="metric-value">{{ expToday(c.name) }}%</span></td>
+        <td><span class="muted-value">{{ expYesterday(c.name) }}%</span></td>
+        <td><span class="difference" [class.positive]="diffExpPercent(c.name) > 0">{{ diffExpPercent(c.name) }}%</span></td>
       </tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <app-history-modal
